@@ -16,6 +16,8 @@
         <Buttons>
             <Button guid="GuidCmdSet" id="FormatDocumentCommand" priority="0x0100" type="Button">
                 <Parent guid="GuidCmdSet" id="TopLevelMenuGroup" />
+                <CommandFlag>DefaultInvisible</CommandFlag>
+                <CommandFlag>DynamicVisibility</CommandFlag>
                 <Strings>
                     <CommandName>Format Document (AStyle)</CommandName>
                     <ButtonText>Format Document (AStyle)</ButtonText>
@@ -23,6 +25,8 @@
             </Button>
             <Button guid="GuidCmdSet" id="FormatSelectionCommand" priority="0x0110" type="Button">
                 <Parent guid="GuidCmdSet" id="TopLevelMenuGroup" />
+                <CommandFlag>DefaultInvisible</CommandFlag>
+                <CommandFlag>DynamicVisibility</CommandFlag>
                 <Strings>
                     <CommandName>Format Selection (AStyle)</CommandName>
                     <ButtonText>Format Selection (AStyle)</ButtonText>
