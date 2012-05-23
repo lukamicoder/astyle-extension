@@ -77,6 +77,7 @@ namespace AStyleExtension {
             string language;
             
             cmd.Visible = GetActiveDocument(out textDoc, out language);
+            cmd.Enabled = cmd.Visible;
         }
 
         private void FormatDocumentCallback(object sender, EventArgs e) {
