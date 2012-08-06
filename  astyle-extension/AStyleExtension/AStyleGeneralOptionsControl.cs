@@ -34,7 +34,7 @@ namespace AStyleExtension {
 		}
 
 		private void OnButtonCPPSettingsClick(object sender, System.EventArgs e) {
-			AStyleGeneralOptionsForm form = new AStyleGeneralOptionsForm(Language.C);
+			var form = new AStyleGeneralOptionsForm(Language.C);
 			form.SetControls(CppOptions);
 
 			if (form.ShowDialog() == DialogResult.OK) {
@@ -44,7 +44,7 @@ namespace AStyleExtension {
 		}
 
 		private void OnButtonCSSettingsClick(object sender, System.EventArgs e) {
-			AStyleGeneralOptionsForm form = new AStyleGeneralOptionsForm(Language.CSharp);
+			var form = new AStyleGeneralOptionsForm(Language.CSharp);
 			form.SetControls(CsOptions);
 
 			if (form.ShowDialog() == DialogResult.OK) {

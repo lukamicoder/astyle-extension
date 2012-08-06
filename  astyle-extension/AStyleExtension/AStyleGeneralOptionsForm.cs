@@ -109,17 +109,20 @@ namespace AStyleExtension {
         }
 
         public void SetControls(string command) {
-            if (_language == Language.CSharp) {
-                comboBoxMode.SelectedIndex = 1;
-            } else if (_language == Language.C) {
-                comboBoxMode.SelectedIndex = 0;
+            switch (_language) {
+                case Language.CSharp:
+                    comboBoxMode.SelectedIndex = 1;
+                    break;
+                case Language.C:
+                    comboBoxMode.SelectedIndex = 0;
+                    break;
             }
 
             if (string.IsNullOrEmpty(command)) {
                 return;
             }
 
-            List<string> optionsList = new List<string>();
+            var optionsList = new List<string>();
             optionsList.AddRange(command.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
 
             foreach (string option in optionsList) {
@@ -222,7 +225,7 @@ namespace AStyleExtension {
         }
 
         private void OnLinkLabelHelpClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            ProcessStartInfo sInfo = new ProcessStartInfo(HelpLink);
+            var sInfo = new ProcessStartInfo(HelpLink);
             Process.Start(sInfo);
         }
 
