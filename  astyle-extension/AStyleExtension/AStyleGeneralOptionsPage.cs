@@ -36,15 +36,19 @@ namespace AStyleExtension {
             }
         }
 
+        protected override void OnDeactivate(CancelEventArgs e) {
+            if (_control != null) {
+                CppOptions = _control.CppOptions;
+                CsOptions = _control.CsOptions;
+            }
+
+            base.OnDeactivate(e);           
+        }
+
         protected override void OnActivate(CancelEventArgs e) {
             if (_control != null) {
-                if (CppOptions != null) {
-                    _control.CppOptions = CppOptions;
-                }
-
-                if (CsOptions != null) {
-                    _control.CsOptions = CsOptions;
-                }
+                _control.CppOptions = CppOptions;
+                _control.CsOptions = CsOptions;
             }
 
             base.OnActivate(e);

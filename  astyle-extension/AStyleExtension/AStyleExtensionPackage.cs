@@ -8,9 +8,10 @@ using Microsoft.VisualStudio.Shell;
 
 namespace AStyleExtension {
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#110", "#112", "1.3", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", "1.4", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideOptionPage(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 0, 0, true)]
+    [ProvideOptionPage(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1000, 1001, true)]
+    [ProvideProfileAttribute(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1002, 1003, true)]
     [ProvideAutoLoad("{f1536ef8-92ec-443c-9ed7-fdadf150da82}")]
     [Guid(GuidList.GuidPkgString)]
     public sealed class AStyleExtensionPackage : Package {
