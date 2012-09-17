@@ -58,6 +58,10 @@ namespace AStyleExtension {
                 return false;
             }
 
+            if (_doc.ReadOnly) {
+                return false;
+            }
+
             textDoc = _doc.Object("TextDocument") as TextDocument;
             if (textDoc == null) {
                 return false;
