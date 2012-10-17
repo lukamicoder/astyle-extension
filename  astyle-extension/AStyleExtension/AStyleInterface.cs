@@ -1,33 +1,33 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
+
+//Code is based on http://astyle.sourceforge.net/develop/sharp.html
+//Credit goes to Channing Dai for providing a patch to support unicode.
 
 namespace AStyleExtension {
-    /// AStyleInterface contains methods to call the Artistic Style formatter.
     public class AStyleInterface {
-        // Cannot use String as a return value because Mono runtime will attempt to
-        // free the returned pointer resulting in a runtime crash.
+        public delegate void AStyleErrorHandler(object sender, AStyleErrorArgs e);
+        public event AStyleErrorHandler ErrorRaised;
+
         private AStyleErrorDelegate _aStyleError;
         private AStyleMemAllocDelegate _aStyleMemAlloc;
 
-        /// Declare callback functions
+        private delegate void AStyleErrorDelegate(int errorNum, [MarshalAs(UnmanagedType.LPStr)] String error);
+        private delegate IntPtr AStyleMemAllocDelegate(int size);
+
         public AStyleInterface() {
             _aStyleMemAlloc = OnAStyleMemAlloc;
             _aStyleError = OnAStyleError;
         }
 
         [DllImport("astyle/astyle", CallingConvention = CallingConvention.StdCall)]
-        private static extern IntPtr AStyleGetVersion();
-
-        // Cannot use String as a return value because Mono runtime will attempt to
-        // free the returned pointer resulting in a runtime crash.
-        [DllImport("astyle/astyle", CallingConvention = CallingConvention.StdCall)]
-        private static extern IntPtr AStyleMain
-            (
-            [MarshalAs(UnmanagedType.LPStr)] String sIn,
+        private static extern IntPtr AStyleMain (
+            IntPtr pTextIn,
             [MarshalAs(UnmanagedType.LPStr)] String sOptions,
             AStyleErrorDelegate errorFunc,
             AStyleMemAllocDelegate memAllocFunc
-            );
+        );
 
         /// Call the AStyleMain function in Artistic Style.
         /// An empty string is returned on error.
@@ -36,41 +36,48 @@ namespace AStyleExtension {
             // Memory space is allocated by OnAStyleMemAlloc, a callback function from AStyle
             String sTextOut = String.Empty;
             try {
-                IntPtr pText = AStyleMain(textIn, options, _aStyleError, _aStyleMemAlloc);
-                if (pText != IntPtr.Zero) {
-                    sTextOut = Marshal.PtrToStringAnsi(pText);
-                    Marshal.FreeHGlobal(pText);
+                IntPtr pTextIn = NativeUtf8FromString(textIn);
+                IntPtr pTextOut = AStyleMain(pTextIn, options, _aStyleError, _aStyleMemAlloc);
+
+                Marshal.FreeHGlobal(pTextIn);
+
+                if (pTextOut != IntPtr.Zero) {
+                    sTextOut = StringFromNativeUtf8(pTextOut);
+                    Marshal.FreeHGlobal(pTextOut);
                 }
-            } catch (BadImageFormatException e) {
-                Console.WriteLine(e.ToString());
-                Console.WriteLine("You may be mixing 32 and 64 bit code!");
             } catch (Exception e) {
-                Console.WriteLine(e.ToString());
+                OnAStyleError(this, new AStyleErrorArgs(e.ToString()));
             }
+
             return sTextOut;
         }
 
-        /// Get the Artistic Style version number.
-        /// Does not need to terminate on error.
-        /// But the exception must be handled when a function is called.
-        public String GetVersion() {
-            String sVersion = String.Empty;
-            try {
-                IntPtr pVersion = AStyleGetVersion();
-                if (pVersion != IntPtr.Zero) {
-                    sVersion = Marshal.PtrToStringAnsi(pVersion);
-                }
-            } catch (BadImageFormatException e) {
-                Console.WriteLine(e.ToString());
-                Console.WriteLine("You may be mixing 32 and 64 bit code!");
-                Console.WriteLine("The program has terminated!");
-                Environment.Exit(1);
-            } catch (Exception e) {
-                Console.WriteLine(e.ToString());
-                Console.WriteLine("The program has terminated!");
-                Environment.Exit(1);
+        /// Code from http://stackoverflow.com/questions/10773440/conversion-in-net-native-utf-8-managed-string
+        private IntPtr NativeUtf8FromString(string managedString) {
+            int len = Encoding.UTF8.GetByteCount(managedString);
+            byte[] buffer = new byte[len + 1];
+            Encoding.UTF8.GetBytes(managedString, 0, managedString.Length, buffer, 0);
+            IntPtr nativeUtf8 = Marshal.AllocHGlobal(buffer.Length);
+            Marshal.Copy(buffer, 0, nativeUtf8, buffer.Length);
+
+            return nativeUtf8;
+        }
+
+        private string StringFromNativeUtf8(IntPtr pointer) {
+            int len = 0;
+            while (Marshal.ReadByte(pointer, len) != 0) {
+                ++len;
             }
-            return sVersion;
+
+            if (len == 0) {
+                return String.Empty;
+            }
+
+            byte[] buffer = new byte[len];
+
+            Marshal.Copy(pointer, buffer, 0, buffer.Length);
+
+            return Encoding.UTF8.GetString(buffer);
         }
 
         // Allocate the memory for the Artistic Style return string.
@@ -78,21 +85,15 @@ namespace AStyleExtension {
             return Marshal.AllocHGlobal(size);
         }
 
-        // Display errors from Artistic Style .
-        private void OnAStyleError(int errorNumber, String errorMessage) {
-            Console.WriteLine("AStyle error " + errorNumber + " - " + errorMessage);
+        private void OnAStyleError(object source, AStyleErrorArgs args) {
+            AStyleErrorHandler tmp = ErrorRaised;
+            if (tmp != null) {
+                tmp(source, args);
+            }
         }
 
-        #region Nested type: AStyleErrorDelegate
-
-        private delegate void AStyleErrorDelegate(int errorNum, [MarshalAs(UnmanagedType.LPStr)] String error);
-
-        #endregion
-
-        #region Nested type: AStyleMemAllocDelegate
-
-        private delegate IntPtr AStyleMemAllocDelegate(int size);
-
-        #endregion
+        private void OnAStyleError(int errorNumber, String errorMessage) {
+            OnAStyleError(this, new AStyleErrorArgs(errorNumber + ": " + errorMessage));
+        }
     }
 }

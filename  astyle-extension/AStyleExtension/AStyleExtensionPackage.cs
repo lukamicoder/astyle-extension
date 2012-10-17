@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.Shell;
 
 namespace AStyleExtension {
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#110", "#112", "1.4", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", "1.5", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1000, 1001, true)]
     [ProvideProfileAttribute(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1002, 1003, true)]
@@ -176,8 +176,13 @@ namespace AStyleExtension {
             }
 
             var aStyle = new AStyleInterface();
+            aStyle.ErrorRaised += OnAStyleErrorRaised;
 
             return aStyle.FormatSource(text, options);
+        }
+
+        private void OnAStyleErrorRaised(object source, AStyleErrorArgs args) {
+            MessageBox.Show(args.Message, "AStyle Formatter Error");
         }
     }
 }

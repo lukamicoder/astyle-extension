@@ -61,6 +61,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AStyleErrorArgs.cs" />
     <Compile Include="AStyleGeneralOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
