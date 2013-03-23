@@ -127,7 +127,7 @@ namespace AStyleExtension {
             int pos = 0;
             foreach (var c in text) {
                 pos++;
-                if (c != ' ') {
+                if (c != ' ' && c != '\t') {
                     break;
                 }
             }
