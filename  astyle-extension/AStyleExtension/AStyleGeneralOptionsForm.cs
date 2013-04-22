@@ -56,6 +56,7 @@ namespace AStyleExtension {
                 { "--pad-paren", checkBoxPadParen },
                 { "--pad-paren-out", checkBoxPadParenOut },
                 { "--pad-paren-in", checkBoxPadParenIn },
+                { "--pad-first-paren-out", checkBoxPadFirstParenOut },
                 { "--pad-header", checkBoxPadHeader },
                 { "--unpad-paren", checkBoxUnpadParen },
                 { "--delete-empty-lines", checkBoxDelEmptyLines },
@@ -66,10 +67,12 @@ namespace AStyleExtension {
                 { "--add-one-line-brackets", checkBoxAddOneLineBrackets },
                 { "--keep-one-line-blocks", checkBoxKeepOneLineBlocks },
                 { "--keep-one-line-statements", checkBoxKeepOneLineStat },
-                { "--convert-tabs", checkBoxConvertTabs }
+                { "--convert-tabs", checkBoxConvertTabs },
+                { "--break-after-logical", checkBoxBreakAfterLogical }
             };
 
             toolTip.SetToolTip(checkBoxIndent, "Indent using spaces or tab characters.");
+            toolTip.SetToolTip(checkBoxIndentForceTabX, "Set tab length to a length that is different than the indent length.");
             toolTip.SetToolTip(checkBoxIndentClasses, "Indent 'class' and 'struct' blocks.");
             toolTip.SetToolTip(checkBoxIndentSwitches, "Indent 'switch' blocks.");
             toolTip.SetToolTip(checkBoxIndentCases, "Indent 'case X:' blocks from the 'case X:' headers.");
@@ -84,6 +87,7 @@ namespace AStyleExtension {
             toolTip.SetToolTip(checkBoxPadOper, "Insert space padding around operators.");
             toolTip.SetToolTip(checkBoxPadParen, "Insert space padding around parenthesis on both the outside and the inside.");
             toolTip.SetToolTip(checkBoxPadParenOut, "Insert space padding around parenthesis on the outside only.");
+            toolTip.SetToolTip(checkBoxPadFirstParenOut, "Insert space padding around the first parenthesis in a series on the outside only.");
             toolTip.SetToolTip(checkBoxPadParenIn, "Insert space padding around parenthesis on the inside only.");
             toolTip.SetToolTip(checkBoxPadHeader, "Insert space padding after paren headers only (e.g. 'if', 'for', 'while').");
             toolTip.SetToolTip(checkBoxUnpadParen, "Remove extra space padding around parenthesis on the inside and outside.");
@@ -98,6 +102,8 @@ namespace AStyleExtension {
             toolTip.SetToolTip(checkBoxConvertTabs, "Converts tabs into spaces in the non-indentation part of the line.");
             toolTip.SetToolTip(checkBoxAlignPointer, "Attach a pointer or reference operator (* or &) to either the variable type or variable name, or in between.");
             toolTip.SetToolTip(checkBoxAlignReference, "Attach a reference operator (&) to either the variable type or variable name, or in between.");
+            toolTip.SetToolTip(checkBoxMaxCodeLength, "Break a line if the code exceeds maximum characters.");
+            toolTip.SetToolTip(checkBoxBreakAfterLogical, "Break a line at a semicolon if the line goes over the maximum length. Used with max-code-length.");
 
             comboBoxStyle.SelectedIndex = 0;
 
@@ -106,6 +112,8 @@ namespace AStyleExtension {
             OnCheckBoxMaxInstateIndentCheckedChanged(checkBoxMaxInstateIndent, null);
             OnCheckBoxAlignPointerCheckedChanged(checkBoxAlignPointer, null);
             OnCheckBoxAlignReferenceCheckedChanged(checkBoxAlignReference, null);
+            OncheckBoxIndentForceTabXCheckedChanged(checkBoxIndentForceTabX, null);
+            OncheckBoxMaxCodeLengthCheckedChanged(checkBoxMaxCodeLength, null);
         }
 
         public void SetControls(string command) {
@@ -137,10 +145,21 @@ namespace AStyleExtension {
                     pos = option.LastIndexOf("=", StringComparison.Ordinal);
 
                     if (int.TryParse(option.Substring(pos + 1), out no)) {
-                        numericUpDownIndent.Value = no;
-                        string[] parts = option.Split('=');
-                        comboBoxIndent.SelectedItem = parts[1];
-                        checkBoxIndent.Checked = true;
+                        if (no >= 2 || no <= 20) {
+                            numericUpDownIndent.Value = no;
+                            string[] parts = option.Split('=');
+                            comboBoxIndent.SelectedItem = parts[1];
+                            checkBoxIndent.Checked = true;
+                        }
+                    }
+                } else if (option.StartsWith("--indent=force-tab-x=")) {
+                    pos = option.LastIndexOf("=", StringComparison.Ordinal);
+
+                    if (int.TryParse(option.Substring(pos + 1), out no)) {
+                        if (no >= 2 || no <= 20) {
+                            numericUpDownIndentForceTabX.Value = no;
+                            checkBoxIndentForceTabX.Checked = true;
+                        }
                     }
                 } else if (option.StartsWith("--min-conditional-indent=")) {
                     pos = option.LastIndexOf("=", StringComparison.Ordinal);
@@ -168,6 +187,16 @@ namespace AStyleExtension {
                     pos = option.LastIndexOf("=", StringComparison.Ordinal);
                     comboBoxAlignReference.SelectedItem = option.Substring(pos + 1);
                     checkBoxAlignReference.Checked = true;
+                } else if (option.StartsWith("--max-code-length=")) {
+                    pos = option.LastIndexOf("=", StringComparison.Ordinal);
+
+                    if (int.TryParse(option.Substring(pos + 1), out no)) {
+                        if (no >= 50 || no <= 200) {
+                            numericUpDownMaxCodeLength.Value = no;
+                            checkBoxMaxCodeLength.Checked = true;
+                            checkBoxBreakAfterLogical.Enabled = true;
+                        }
+                    }
                 } else {
                     CheckBox cb;
                     if (_checkboxDic.TryGetValue(option, out cb)) {
@@ -180,7 +209,7 @@ namespace AStyleExtension {
         public string GetCommandLine() {
             StringBuilder sb = new StringBuilder();
 
-            foreach(KeyValuePair<string, string> pair in _styleDic) {
+            foreach (KeyValuePair<string, string> pair in _styleDic) {
                 if ((string)comboBoxStyle.SelectedItem == pair.Value) {
                     sb.Append(pair.Key).Append(" ");
                     break;
@@ -189,6 +218,10 @@ namespace AStyleExtension {
 
             if (checkBoxIndent.Checked) {
                 sb.Append("--indent=").Append(comboBoxIndent.SelectedItem).Append("=").Append(numericUpDownIndent.Value).Append(" ");
+            }
+
+            if (checkBoxIndentForceTabX.Checked) {
+                sb.Append("--indent=force-tab-x=").Append(numericUpDownIndentForceTabX.Value).Append(" ");
             }
 
             if (checkBoxMinCondIndent.Checked) {
@@ -205,6 +238,10 @@ namespace AStyleExtension {
 
             if (checkBoxAlignReference.Checked) {
                 sb.Append("--align-reference=").Append(comboBoxAlignReference.SelectedItem).Append(" ");
+            }
+
+            if (checkBoxMaxCodeLength.Checked) {
+                sb.Append("--max-code-length=").Append(numericUpDownMaxCodeLength.Value).Append(" ");
             }
 
             foreach (KeyValuePair<string, CheckBox> pair in _checkboxDic) {
@@ -241,6 +278,15 @@ namespace AStyleExtension {
             }
         }
 
+        private void OncheckBoxIndentForceTabXCheckedChanged(object sender, EventArgs e) {
+            if (((CheckBox)sender).Checked) {
+                numericUpDownIndentForceTabX.Enabled = true;
+            } else {
+                numericUpDownIndentForceTabX.Value = 8;
+                numericUpDownIndentForceTabX.Enabled = false;
+            }
+        }
+
         private void OnCheckBoxMinCondIndentCheckedChanged(object sender, EventArgs e) {
             if (((CheckBox)sender).Checked) {
                 numericUpDownMinCondIndent.Enabled = true;
@@ -274,6 +320,18 @@ namespace AStyleExtension {
             } else {
                 comboBoxAlignReference.SelectedIndex = 0;
                 comboBoxAlignReference.Enabled = false;
+            }
+        }
+
+        private void OncheckBoxMaxCodeLengthCheckedChanged(object sender, EventArgs e) {
+            if (((CheckBox)sender).Checked) {
+                numericUpDownMaxCodeLength.Enabled = true;
+                checkBoxBreakAfterLogical.Enabled = true;
+            } else {
+                numericUpDownMaxCodeLength.Value = 50;
+                numericUpDownMaxCodeLength.Enabled = false;
+                checkBoxBreakAfterLogical.Checked = false;
+                checkBoxBreakAfterLogical.Enabled = false;
             }
         }
     }

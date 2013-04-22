@@ -62,7 +62,7 @@
             this.textBoxCPP.Multiline = true;
             this.textBoxCPP.Name = "textBoxCPP";
             this.textBoxCPP.ReadOnly = true;
-            this.textBoxCPP.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.textBoxCPP.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBoxCPP.Size = new System.Drawing.Size(368, 60);
             this.textBoxCPP.TabIndex = 1;
             // 
@@ -103,7 +103,7 @@
             this.textBoxCS.Multiline = true;
             this.textBoxCS.Name = "textBoxCS";
             this.textBoxCS.ReadOnly = true;
-            this.textBoxCS.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.textBoxCS.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBoxCS.Size = new System.Drawing.Size(368, 60);
             this.textBoxCS.TabIndex = 2;
             // 
