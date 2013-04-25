@@ -92,7 +92,7 @@
             // buttonOK
             // 
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOK.Location = new System.Drawing.Point(520, 516);
+            this.buttonOK.Location = new System.Drawing.Point(520, 513);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 5;
@@ -102,7 +102,7 @@
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(438, 516);
+            this.buttonCancel.Location = new System.Drawing.Point(438, 513);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 6;
@@ -159,6 +159,7 @@
             // checkBoxIndentForceTabX
             // 
             this.checkBoxIndentForceTabX.AutoSize = true;
+            this.checkBoxIndentForceTabX.Enabled = false;
             this.checkBoxIndentForceTabX.Location = new System.Drawing.Point(9, 44);
             this.checkBoxIndentForceTabX.Name = "checkBoxIndentForceTabX";
             this.checkBoxIndentForceTabX.Size = new System.Drawing.Size(123, 17);
@@ -214,6 +215,7 @@
             this.comboBoxIndent.Name = "comboBoxIndent";
             this.comboBoxIndent.Size = new System.Drawing.Size(73, 21);
             this.comboBoxIndent.TabIndex = 14;
+            this.comboBoxIndent.SelectedIndexChanged += new System.EventHandler(this.OnComboBoxIndentSelectedIndexChanged);
             // 
             // numericUpDownIndent
             // 
@@ -233,7 +235,7 @@
             this.numericUpDownIndent.Size = new System.Drawing.Size(44, 20);
             this.numericUpDownIndent.TabIndex = 12;
             this.numericUpDownIndent.Value = new decimal(new int[] {
-            2,
+            4,
             0,
             0,
             0});
@@ -554,6 +556,7 @@
             // checkBoxBreakAfterLogical
             // 
             this.checkBoxBreakAfterLogical.AutoSize = true;
+            this.checkBoxBreakAfterLogical.Enabled = false;
             this.checkBoxBreakAfterLogical.Location = new System.Drawing.Point(216, 94);
             this.checkBoxBreakAfterLogical.Name = "checkBoxBreakAfterLogical";
             this.checkBoxBreakAfterLogical.Size = new System.Drawing.Size(116, 17);
@@ -746,7 +749,7 @@
             // linkLabelHelp
             // 
             this.linkLabelHelp.AutoSize = true;
-            this.linkLabelHelp.Location = new System.Drawing.Point(12, 520);
+            this.linkLabelHelp.Location = new System.Drawing.Point(12, 517);
             this.linkLabelHelp.Name = "linkLabelHelp";
             this.linkLabelHelp.Size = new System.Drawing.Size(60, 13);
             this.linkLabelHelp.TabIndex = 12;

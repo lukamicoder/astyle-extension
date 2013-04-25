@@ -334,5 +334,19 @@ namespace AStyleExtension {
                 checkBoxBreakAfterLogical.Enabled = false;
             }
         }
+
+        private void OnComboBoxIndentSelectedIndexChanged(object sender, EventArgs e) {
+            var combo = (ComboBox) sender;
+
+            if ((string)combo.SelectedItem == "force-tab") {
+                checkBoxIndentForceTabX.Enabled = true;
+                numericUpDownIndentForceTabX.Enabled = true;
+            } else {
+                checkBoxIndentForceTabX.Checked = false;
+                checkBoxIndentForceTabX.Enabled = false;
+                numericUpDownIndentForceTabX.Value = 8;
+                numericUpDownIndentForceTabX.Enabled = false;
+            }
+        }
     }
 }
