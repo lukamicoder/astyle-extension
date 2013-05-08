@@ -44,9 +44,11 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +63,12 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AStyleEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AStyleEditForm.Designer.cs">
+      <DependentUpon>AStyleEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AStyleErrorArgs.cs" />
     <Compile Include="AStyleGeneralOptionsControl.cs">
       <SubType>UserControl</SubType>
@@ -72,23 +80,27 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AStyleInterface.cs" />
+    <Compile Include="AStyleSettings.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="AStyleExtensionPackage.cs" />
-    <Compile Include="AStyleGeneralOptionsForm.cs">
+    <Compile Include="AStyleSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AStyleGeneralOptionsForm.designer.cs">
-      <DependentUpon>AStyleGeneralOptionsForm.cs</DependentUpon>
+    <Compile Include="AStyleSettingsForm.designer.cs">
+      <DependentUpon>AStyleSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PkgCmdID.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AStyleEditForm.resx">
+      <DependentUpon>AStyleEditForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AStyleGeneralOptionsControl.resx">
       <DependentUpon>AStyleGeneralOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AStyleGeneralOptionsForm.resx">
-      <DependentUpon>AStyleGeneralOptionsForm.cs</DependentUpon>
+    <EmbeddedResource Include="AStyleSettingsForm.resx">
+      <DependentUpon>AStyleSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>

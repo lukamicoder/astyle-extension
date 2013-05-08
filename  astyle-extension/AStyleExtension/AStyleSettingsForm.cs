@@ -11,7 +11,7 @@ namespace AStyleExtension {
         Java
     }
 
-    public sealed partial class AStyleGeneralOptionsForm : Form {
+    public sealed partial class AStyleSettingsForm : Form {
         Dictionary<string, CheckBox> _checkboxDic;
         private Language _language;
         private const string HelpLink = "http://astyle.sourceforge.net/astyle.html";
@@ -32,14 +32,17 @@ namespace AStyleExtension {
             { "--style=lisp", "Lisp" }
         };
 
-        public AStyleGeneralOptionsForm(Language language) {
+        public AStyleSettingsForm(Language language) {
             InitializeComponent();
             _language = language;
 
-            if (_language == Language.CSharp) {
-                Text = "AStyle C# Settings";
-            } else if (_language == Language.C) {
-                Text = "AStyle C/C++ Settings";
+            switch (_language) {
+                case Language.CSharp:
+                    Text = "AStyle C# Settings";
+                    break;
+                case Language.C:
+                    Text = "AStyle C/C++ Settings";
+                    break;
             }
 
             _checkboxDic = new Dictionary<string, CheckBox> {

@@ -12,6 +12,7 @@ namespace AStyleExtension {
 
         public string CppOptions { get; set; }
         public string CsOptions { get; set; }
+
         public bool IsCSarpEnabled {
             get { return _isCSarpEnabled; }
             set { _isCSarpEnabled = value; }
@@ -49,6 +50,8 @@ namespace AStyleExtension {
             if (_control != null) {
                 _control.CppOptions = CppOptions;
                 _control.CsOptions = CsOptions;
+
+                _control.ClearDetails();
             }
 
             base.OnActivate(e);

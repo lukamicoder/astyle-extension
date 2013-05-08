@@ -1,5 +1,5 @@
 ﻿namespace AStyleExtension {
-    sealed partial class AStyleGeneralOptionsForm {
+    sealed partial class AStyleSettingsForm {
         /// <summary>
         /// Required designer variable.
         /// </summary>

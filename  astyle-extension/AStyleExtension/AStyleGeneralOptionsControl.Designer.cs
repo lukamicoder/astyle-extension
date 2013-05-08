@@ -23,52 +23,85 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.groupBoxCPP = new System.Windows.Forms.GroupBox();
+            this.tabControlOptions = new System.Windows.Forms.TabControl();
+            this.tabPageCPP = new System.Windows.Forms.TabPage();
+            this.buttonCPPEdit = new System.Windows.Forms.Button();
             this.labelCPP = new System.Windows.Forms.Label();
             this.textBoxCPP = new System.Windows.Forms.TextBox();
             this.buttonCPPSettings = new System.Windows.Forms.Button();
-            this.groupBoxCS = new System.Windows.Forms.GroupBox();
+            this.tabPageCS = new System.Windows.Forms.TabPage();
+            this.buttonCSEdit = new System.Windows.Forms.Button();
             this.labelCS = new System.Windows.Forms.Label();
             this.textBoxCS = new System.Windows.Forms.TextBox();
             this.buttonCSSettings = new System.Windows.Forms.Button();
-            this.groupBoxCPP.SuspendLayout();
-            this.groupBoxCS.SuspendLayout();
+            this.tabPageImport = new System.Windows.Forms.TabPage();
+            this.buttonImport = new System.Windows.Forms.Button();
+            this.buttonExport = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxDetails = new System.Windows.Forms.TextBox();
+            this.tabControlOptions.SuspendLayout();
+            this.tabPageCPP.SuspendLayout();
+            this.tabPageCS.SuspendLayout();
+            this.tabPageImport.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBoxCPP
+            // tabControlOptions
             // 
-            this.groupBoxCPP.Controls.Add(this.labelCPP);
-            this.groupBoxCPP.Controls.Add(this.textBoxCPP);
-            this.groupBoxCPP.Controls.Add(this.buttonCPPSettings);
-            this.groupBoxCPP.Location = new System.Drawing.Point(0, -2);
-            this.groupBoxCPP.Name = "groupBoxCPP";
-            this.groupBoxCPP.Size = new System.Drawing.Size(394, 144);
-            this.groupBoxCPP.TabIndex = 1;
-            this.groupBoxCPP.TabStop = false;
-            this.groupBoxCPP.Text = "C/C++";
+            this.tabControlOptions.Controls.Add(this.tabPageCPP);
+            this.tabControlOptions.Controls.Add(this.tabPageCS);
+            this.tabControlOptions.Controls.Add(this.tabPageImport);
+            this.tabControlOptions.Location = new System.Drawing.Point(3, 3);
+            this.tabControlOptions.Name = "tabControlOptions";
+            this.tabControlOptions.SelectedIndex = 0;
+            this.tabControlOptions.Size = new System.Drawing.Size(394, 285);
+            this.tabControlOptions.TabIndex = 3;
+            // 
+            // tabPageCPP
+            // 
+            this.tabPageCPP.Controls.Add(this.buttonCPPEdit);
+            this.tabPageCPP.Controls.Add(this.labelCPP);
+            this.tabPageCPP.Controls.Add(this.textBoxCPP);
+            this.tabPageCPP.Controls.Add(this.buttonCPPSettings);
+            this.tabPageCPP.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCPP.Name = "tabPageCPP";
+            this.tabPageCPP.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageCPP.Size = new System.Drawing.Size(386, 259);
+            this.tabPageCPP.TabIndex = 0;
+            this.tabPageCPP.Text = "C/C++";
+            this.tabPageCPP.UseVisualStyleBackColor = true;
+            // 
+            // buttonCPPEdit
+            // 
+            this.buttonCPPEdit.Location = new System.Drawing.Point(91, 6);
+            this.buttonCPPEdit.Name = "buttonCPPEdit";
+            this.buttonCPPEdit.Size = new System.Drawing.Size(75, 23);
+            this.buttonCPPEdit.TabIndex = 5;
+            this.buttonCPPEdit.Text = "Edit";
+            this.buttonCPPEdit.UseVisualStyleBackColor = true;
+            this.buttonCPPEdit.Click += new System.EventHandler(this.OnButtonCPPEditClick);
             // 
             // labelCPP
             // 
             this.labelCPP.AutoSize = true;
-            this.labelCPP.Location = new System.Drawing.Point(12, 54);
+            this.labelCPP.Location = new System.Drawing.Point(7, 40);
             this.labelCPP.Name = "labelCPP";
             this.labelCPP.Size = new System.Drawing.Size(76, 13);
-            this.labelCPP.TabIndex = 2;
+            this.labelCPP.TabIndex = 4;
             this.labelCPP.Text = "Command line:";
             // 
             // textBoxCPP
             // 
-            this.textBoxCPP.Location = new System.Drawing.Point(13, 70);
+            this.textBoxCPP.Location = new System.Drawing.Point(10, 56);
             this.textBoxCPP.Multiline = true;
             this.textBoxCPP.Name = "textBoxCPP";
             this.textBoxCPP.ReadOnly = true;
             this.textBoxCPP.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxCPP.Size = new System.Drawing.Size(368, 60);
-            this.textBoxCPP.TabIndex = 1;
+            this.textBoxCPP.Size = new System.Drawing.Size(368, 190);
+            this.textBoxCPP.TabIndex = 3;
             // 
             // buttonCPPSettings
             // 
-            this.buttonCPPSettings.Location = new System.Drawing.Point(13, 19);
+            this.buttonCPPSettings.Location = new System.Drawing.Point(10, 6);
             this.buttonCPPSettings.Name = "buttonCPPSettings";
             this.buttonCPPSettings.Size = new System.Drawing.Size(75, 23);
             this.buttonCPPSettings.TabIndex = 0;
@@ -76,40 +109,52 @@
             this.buttonCPPSettings.UseVisualStyleBackColor = true;
             this.buttonCPPSettings.Click += new System.EventHandler(this.OnButtonCPPSettingsClick);
             // 
-            // groupBoxCS
+            // tabPageCS
             // 
-            this.groupBoxCS.Controls.Add(this.labelCS);
-            this.groupBoxCS.Controls.Add(this.textBoxCS);
-            this.groupBoxCS.Controls.Add(this.buttonCSSettings);
-            this.groupBoxCS.Location = new System.Drawing.Point(0, 144);
-            this.groupBoxCS.Name = "groupBoxCS";
-            this.groupBoxCS.Size = new System.Drawing.Size(394, 144);
-            this.groupBoxCS.TabIndex = 2;
-            this.groupBoxCS.TabStop = false;
-            this.groupBoxCS.Text = "C#";
+            this.tabPageCS.Controls.Add(this.buttonCSEdit);
+            this.tabPageCS.Controls.Add(this.labelCS);
+            this.tabPageCS.Controls.Add(this.textBoxCS);
+            this.tabPageCS.Controls.Add(this.buttonCSSettings);
+            this.tabPageCS.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCS.Name = "tabPageCS";
+            this.tabPageCS.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageCS.Size = new System.Drawing.Size(386, 259);
+            this.tabPageCS.TabIndex = 1;
+            this.tabPageCS.Text = "C#";
+            this.tabPageCS.UseVisualStyleBackColor = true;
+            // 
+            // buttonCSEdit
+            // 
+            this.buttonCSEdit.Location = new System.Drawing.Point(91, 6);
+            this.buttonCSEdit.Name = "buttonCSEdit";
+            this.buttonCSEdit.Size = new System.Drawing.Size(75, 23);
+            this.buttonCSEdit.TabIndex = 6;
+            this.buttonCSEdit.Text = "Edit";
+            this.buttonCSEdit.UseVisualStyleBackColor = true;
+            this.buttonCSEdit.Click += new System.EventHandler(this.OnButtonCSEditClick);
             // 
             // labelCS
             // 
             this.labelCS.AutoSize = true;
-            this.labelCS.Location = new System.Drawing.Point(12, 54);
+            this.labelCS.Location = new System.Drawing.Point(7, 40);
             this.labelCS.Name = "labelCS";
             this.labelCS.Size = new System.Drawing.Size(76, 13);
-            this.labelCS.TabIndex = 3;
+            this.labelCS.TabIndex = 5;
             this.labelCS.Text = "Command line:";
             // 
             // textBoxCS
             // 
-            this.textBoxCS.Location = new System.Drawing.Point(13, 70);
+            this.textBoxCS.Location = new System.Drawing.Point(10, 56);
             this.textBoxCS.Multiline = true;
             this.textBoxCS.Name = "textBoxCS";
             this.textBoxCS.ReadOnly = true;
             this.textBoxCS.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxCS.Size = new System.Drawing.Size(368, 60);
-            this.textBoxCS.TabIndex = 2;
+            this.textBoxCS.Size = new System.Drawing.Size(368, 188);
+            this.textBoxCS.TabIndex = 4;
             // 
             // buttonCSSettings
             // 
-            this.buttonCSSettings.Location = new System.Drawing.Point(13, 19);
+            this.buttonCSSettings.Location = new System.Drawing.Point(10, 6);
             this.buttonCSSettings.Name = "buttonCSSettings";
             this.buttonCSSettings.Size = new System.Drawing.Size(75, 23);
             this.buttonCSSettings.TabIndex = 1;
@@ -117,32 +162,96 @@
             this.buttonCSSettings.UseVisualStyleBackColor = true;
             this.buttonCSSettings.Click += new System.EventHandler(this.OnButtonCSSettingsClick);
             // 
+            // tabPageImport
+            // 
+            this.tabPageImport.Controls.Add(this.label1);
+            this.tabPageImport.Controls.Add(this.textBoxDetails);
+            this.tabPageImport.Controls.Add(this.buttonImport);
+            this.tabPageImport.Controls.Add(this.buttonExport);
+            this.tabPageImport.Location = new System.Drawing.Point(4, 22);
+            this.tabPageImport.Name = "tabPageImport";
+            this.tabPageImport.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageImport.Size = new System.Drawing.Size(386, 259);
+            this.tabPageImport.TabIndex = 2;
+            this.tabPageImport.Text = "Export/Import";
+            this.tabPageImport.UseVisualStyleBackColor = true;
+            // 
+            // buttonImport
+            // 
+            this.buttonImport.Location = new System.Drawing.Point(91, 6);
+            this.buttonImport.Name = "buttonImport";
+            this.buttonImport.Size = new System.Drawing.Size(75, 23);
+            this.buttonImport.TabIndex = 3;
+            this.buttonImport.Text = "Import";
+            this.buttonImport.UseVisualStyleBackColor = true;
+            this.buttonImport.Click += new System.EventHandler(this.OnButtonImportClick);
+            // 
+            // buttonExport
+            // 
+            this.buttonExport.Location = new System.Drawing.Point(10, 6);
+            this.buttonExport.Name = "buttonExport";
+            this.buttonExport.Size = new System.Drawing.Size(75, 23);
+            this.buttonExport.TabIndex = 2;
+            this.buttonExport.Text = "Export";
+            this.buttonExport.UseVisualStyleBackColor = true;
+            this.buttonExport.Click += new System.EventHandler(this.OnButtonExportClick);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 40);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(42, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Details:";
+            // 
+            // textBoxDetails
+            // 
+            this.textBoxDetails.Location = new System.Drawing.Point(10, 56);
+            this.textBoxDetails.Multiline = true;
+            this.textBoxDetails.Name = "textBoxDetails";
+            this.textBoxDetails.ReadOnly = true;
+            this.textBoxDetails.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxDetails.Size = new System.Drawing.Size(368, 188);
+            this.textBoxDetails.TabIndex = 6;
+            // 
             // AStyleGeneralOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.groupBoxCS);
-            this.Controls.Add(this.groupBoxCPP);
+            this.Controls.Add(this.tabControlOptions);
             this.Name = "AStyleGeneralOptionsControl";
             this.Size = new System.Drawing.Size(433, 344);
-            this.groupBoxCPP.ResumeLayout(false);
-            this.groupBoxCPP.PerformLayout();
-            this.groupBoxCS.ResumeLayout(false);
-            this.groupBoxCS.PerformLayout();
+            this.tabControlOptions.ResumeLayout(false);
+            this.tabPageCPP.ResumeLayout(false);
+            this.tabPageCPP.PerformLayout();
+            this.tabPageCS.ResumeLayout(false);
+            this.tabPageCS.PerformLayout();
+            this.tabPageImport.ResumeLayout(false);
+            this.tabPageImport.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBoxCPP;
-        private System.Windows.Forms.GroupBox groupBoxCS;
-        private System.Windows.Forms.Button buttonCPPSettings;
-        private System.Windows.Forms.Button buttonCSSettings;
+        private System.Windows.Forms.TabControl tabControlOptions;
+        private System.Windows.Forms.TabPage tabPageCPP;
         private System.Windows.Forms.Label labelCPP;
         private System.Windows.Forms.TextBox textBoxCPP;
+        private System.Windows.Forms.Button buttonCPPSettings;
+        private System.Windows.Forms.TabPage tabPageCS;
         private System.Windows.Forms.Label labelCS;
         private System.Windows.Forms.TextBox textBoxCS;
+        private System.Windows.Forms.Button buttonCSSettings;
+        private System.Windows.Forms.Button buttonCPPEdit;
+        private System.Windows.Forms.Button buttonCSEdit;
+        private System.Windows.Forms.TabPage tabPageImport;
+        private System.Windows.Forms.Button buttonImport;
+        private System.Windows.Forms.Button buttonExport;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBoxDetails;
+
 
     }
 }
