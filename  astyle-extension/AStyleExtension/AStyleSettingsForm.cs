@@ -6,7 +6,8 @@ using System.Windows.Forms;
 
 namespace AStyleExtension {
     public enum Language {
-        C,
+        NA,
+        Cpp,
         CSharp,
         Java
     }
@@ -40,7 +41,7 @@ namespace AStyleExtension {
                 case Language.CSharp:
                     Text = "AStyle C# Settings";
                     break;
-                case Language.C:
+                case Language.Cpp:
                     Text = "AStyle C/C++ Settings";
                     break;
             }
@@ -124,7 +125,7 @@ namespace AStyleExtension {
                 case Language.CSharp:
                     comboBoxMode.SelectedIndex = 1;
                     break;
-                case Language.C:
+                case Language.Cpp:
                     comboBoxMode.SelectedIndex = 0;
                     break;
             }
@@ -256,7 +257,7 @@ namespace AStyleExtension {
             if (sb.Length > 1) {
                 if (_language == Language.CSharp) {
                     sb.Append("--mode=cs");
-                } else if (_language == Language.C) {
+                } else if (_language == Language.Cpp) {
                     sb.Append("--mode=c");
                 }
             }

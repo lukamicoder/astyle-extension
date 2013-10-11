@@ -8,14 +8,15 @@ namespace AStyleExtension {
     [CLSCompliant(false), ComVisible(true)]
     public class AStyleGeneralOptionsPage : DialogPage {
         private AStyleGeneralOptionsControl _control;
-        private bool _isCSarpEnabled = true;
 
         public string CppOptions { get; set; }
         public string CsOptions { get; set; }
+        public bool CppFormatOnSave { get; set; }
+        public bool CsFormatOnSave { get; set; }
+        public bool IsCSarpEnabled { get; set; }
 
-        public bool IsCSarpEnabled {
-            get { return _isCSarpEnabled; }
-            set { _isCSarpEnabled = value; }
+        public AStyleGeneralOptionsPage() {
+            IsCSarpEnabled = true;
         }
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -31,7 +32,9 @@ namespace AStyleExtension {
                     _control.CsOptions = CsOptions;
                 }
 
-                _control.IsCSarpEnabled = IsCSarpEnabled; 
+                _control.IsCSarpEnabled = IsCSarpEnabled;
+                _control.CppFormatOnSave = CppFormatOnSave;
+                _control.CsFormatOnSave = CsFormatOnSave;
 
                 return _control;
             }
@@ -41,6 +44,8 @@ namespace AStyleExtension {
             if (_control != null) {
                 CppOptions = _control.CppOptions;
                 CsOptions = _control.CsOptions;
+                CppFormatOnSave = _control.CppFormatOnSave;
+                CsFormatOnSave = _control.CsFormatOnSave;
             }
 
             base.OnDeactivate(e);           
@@ -50,6 +55,8 @@ namespace AStyleExtension {
             if (_control != null) {
                 _control.CppOptions = CppOptions;
                 _control.CsOptions = CsOptions;
+                _control.CppFormatOnSave = CppFormatOnSave;
+                _control.CsFormatOnSave = CsFormatOnSave;
 
                 _control.ClearDetails();
             }
@@ -61,6 +68,8 @@ namespace AStyleExtension {
             if (_control != null) {
                 CppOptions = _control.CppOptions;
                 CsOptions = _control.CsOptions;
+                CppFormatOnSave = _control.CppFormatOnSave;
+                CsFormatOnSave = _control.CsFormatOnSave;
             }
 
             base.OnApply(e);

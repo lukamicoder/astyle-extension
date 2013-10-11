@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="AStyleInterface.cs" />
     <Compile Include="AStyleSettings.cs" />
+    <Compile Include="DocumentEventListener.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="AStyleExtensionPackage.cs" />
     <Compile Include="AStyleSettingsForm.cs">

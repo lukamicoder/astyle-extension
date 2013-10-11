@@ -25,20 +25,22 @@
         private void InitializeComponent() {
             this.tabControlOptions = new System.Windows.Forms.TabControl();
             this.tabPageCPP = new System.Windows.Forms.TabPage();
+            this.checkBoxCppFormatOnSave = new System.Windows.Forms.CheckBox();
             this.buttonCPPEdit = new System.Windows.Forms.Button();
             this.labelCPP = new System.Windows.Forms.Label();
             this.textBoxCPP = new System.Windows.Forms.TextBox();
             this.buttonCPPSettings = new System.Windows.Forms.Button();
             this.tabPageCS = new System.Windows.Forms.TabPage();
+            this.checkBoxCsFormatOnSave = new System.Windows.Forms.CheckBox();
             this.buttonCSEdit = new System.Windows.Forms.Button();
             this.labelCS = new System.Windows.Forms.Label();
             this.textBoxCS = new System.Windows.Forms.TextBox();
             this.buttonCSSettings = new System.Windows.Forms.Button();
             this.tabPageImport = new System.Windows.Forms.TabPage();
-            this.buttonImport = new System.Windows.Forms.Button();
-            this.buttonExport = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxDetails = new System.Windows.Forms.TextBox();
+            this.buttonImport = new System.Windows.Forms.Button();
+            this.buttonExport = new System.Windows.Forms.Button();
             this.tabControlOptions.SuspendLayout();
             this.tabPageCPP.SuspendLayout();
             this.tabPageCS.SuspendLayout();
@@ -58,6 +60,7 @@
             // 
             // tabPageCPP
             // 
+            this.tabPageCPP.Controls.Add(this.checkBoxCppFormatOnSave);
             this.tabPageCPP.Controls.Add(this.buttonCPPEdit);
             this.tabPageCPP.Controls.Add(this.labelCPP);
             this.tabPageCPP.Controls.Add(this.textBoxCPP);
@@ -69,6 +72,16 @@
             this.tabPageCPP.TabIndex = 0;
             this.tabPageCPP.Text = "C/C++";
             this.tabPageCPP.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCppFormatOnSave
+            // 
+            this.checkBoxCppFormatOnSave.AutoSize = true;
+            this.checkBoxCppFormatOnSave.Location = new System.Drawing.Point(286, 10);
+            this.checkBoxCppFormatOnSave.Name = "checkBoxCppFormatOnSave";
+            this.checkBoxCppFormatOnSave.Size = new System.Drawing.Size(99, 17);
+            this.checkBoxCppFormatOnSave.TabIndex = 6;
+            this.checkBoxCppFormatOnSave.Text = "Format on save";
+            this.checkBoxCppFormatOnSave.UseVisualStyleBackColor = true;
             // 
             // buttonCPPEdit
             // 
@@ -111,6 +124,7 @@
             // 
             // tabPageCS
             // 
+            this.tabPageCS.Controls.Add(this.checkBoxCsFormatOnSave);
             this.tabPageCS.Controls.Add(this.buttonCSEdit);
             this.tabPageCS.Controls.Add(this.labelCS);
             this.tabPageCS.Controls.Add(this.textBoxCS);
@@ -122,6 +136,16 @@
             this.tabPageCS.TabIndex = 1;
             this.tabPageCS.Text = "C#";
             this.tabPageCS.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCsFormatOnSave
+            // 
+            this.checkBoxCsFormatOnSave.AutoSize = true;
+            this.checkBoxCsFormatOnSave.Location = new System.Drawing.Point(286, 10);
+            this.checkBoxCsFormatOnSave.Name = "checkBoxCsFormatOnSave";
+            this.checkBoxCsFormatOnSave.Size = new System.Drawing.Size(99, 17);
+            this.checkBoxCsFormatOnSave.TabIndex = 7;
+            this.checkBoxCsFormatOnSave.Text = "Format on save";
+            this.checkBoxCsFormatOnSave.UseVisualStyleBackColor = true;
             // 
             // buttonCSEdit
             // 
@@ -176,6 +200,25 @@
             this.tabPageImport.Text = "Export/Import";
             this.tabPageImport.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 40);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(42, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Details:";
+            // 
+            // textBoxDetails
+            // 
+            this.textBoxDetails.Location = new System.Drawing.Point(10, 56);
+            this.textBoxDetails.Multiline = true;
+            this.textBoxDetails.Name = "textBoxDetails";
+            this.textBoxDetails.ReadOnly = true;
+            this.textBoxDetails.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxDetails.Size = new System.Drawing.Size(368, 188);
+            this.textBoxDetails.TabIndex = 6;
+            // 
             // buttonImport
             // 
             this.buttonImport.Location = new System.Drawing.Point(91, 6);
@@ -195,25 +238,6 @@
             this.buttonExport.Text = "Export";
             this.buttonExport.UseVisualStyleBackColor = true;
             this.buttonExport.Click += new System.EventHandler(this.OnButtonExportClick);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 40);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Details:";
-            // 
-            // textBoxDetails
-            // 
-            this.textBoxDetails.Location = new System.Drawing.Point(10, 56);
-            this.textBoxDetails.Multiline = true;
-            this.textBoxDetails.Name = "textBoxDetails";
-            this.textBoxDetails.ReadOnly = true;
-            this.textBoxDetails.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxDetails.Size = new System.Drawing.Size(368, 188);
-            this.textBoxDetails.TabIndex = 6;
             // 
             // AStyleGeneralOptionsControl
             // 
@@ -251,6 +275,8 @@
         private System.Windows.Forms.Button buttonExport;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxDetails;
+        private System.Windows.Forms.CheckBox checkBoxCppFormatOnSave;
+        private System.Windows.Forms.CheckBox checkBoxCsFormatOnSave;
 
 
     }

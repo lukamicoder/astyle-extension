@@ -1,188 +1,222 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using EnvDTE;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 
 namespace AStyleExtension {
-    [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#110", "#112", "2.1", IconResourceID = 400)]
-    [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideOptionPage(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1000, 1001, true)]
-    [ProvideProfileAttribute(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1002, 1003, true)]
-    [ProvideAutoLoad("{f1536ef8-92ec-443c-9ed7-fdadf150da82}")]
-    [Guid(GuidList.GuidPkgString)]
-    public sealed class AStyleExtensionPackage : Package {
-        private DTE _dte;
-        private Document _doc;
-        private OleMenuCommand _formatSelMenuCommand;
-        private OleMenuCommand _formatDocMenuCommand;
-        private bool _isCSharpEnabled;
-        private Properties _props;
+	[PackageRegistration(UseManagedResourcesOnly = true)]
+	[InstalledProductRegistration("#110", "#112", "2.2", IconResourceID = 400)]
+	[ProvideMenuResource("Menus.ctmenu", 1)]
+	[ProvideOptionPage(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1000, 1001, true)]
+	[ProvideProfileAttribute(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1002, 1003, true)]
+	[ProvideAutoLoad("{f1536ef8-92ec-443c-9ed7-fdadf150da82}")]
+	[Guid(GuidList.GuidPkgString)]
+	public sealed class AStyleExtensionPackage : Package {
+		private DTE _dte;
+		private OleMenuCommand _formatSelMenuCommand;
+		private OleMenuCommand _formatDocMenuCommand;
+		private bool _isCSharpEnabled;
+		private Properties _props;
+		private DocumentEventListener _documentEventListener;
 
-        protected override void Initialize() {
-            base.Initialize();
+		protected override void Initialize() {
+			base.Initialize();
 
-            var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if (null != mcs) {
-                var id = new CommandID(GuidList.GuidCmdSet, (int)PkgCmdIDList.FormatDocumentCommand);
-                _formatDocMenuCommand = new OleMenuCommand(FormatDocumentCallback, id);
-                mcs.AddCommand(_formatDocMenuCommand);
-                _formatDocMenuCommand.BeforeQueryStatus += OnBeforeQueryStatus;
+			var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+			if (null != mcs) {
+				var id = new CommandID(GuidList.GuidCmdSet, (int)PkgCmdIDList.FormatDocumentCommand);
+				_formatDocMenuCommand = new OleMenuCommand(FormatDocumentCallback, id);
+				mcs.AddCommand(_formatDocMenuCommand);
+				_formatDocMenuCommand.BeforeQueryStatus += OnBeforeQueryStatus;
 
-                id = new CommandID(GuidList.GuidCmdSet, (int)PkgCmdIDList.FormatSelectionCommand);
-                _formatSelMenuCommand = new OleMenuCommand(FormatSelectionCallback, id);
-                mcs.AddCommand(_formatSelMenuCommand);
-                _formatSelMenuCommand.BeforeQueryStatus += OnBeforeQueryStatus;
+				id = new CommandID(GuidList.GuidCmdSet, (int)PkgCmdIDList.FormatSelectionCommand);
+				_formatSelMenuCommand = new OleMenuCommand(FormatSelectionCallback, id);
+				mcs.AddCommand(_formatSelMenuCommand);
+				_formatSelMenuCommand.BeforeQueryStatus += OnBeforeQueryStatus;
+			}
 
-            }
+			_dte = (DTE)GetService(typeof(DTE));
 
-            _dte = (DTE)GetService(typeof(DTE));
+			_documentEventListener = new DocumentEventListener(this);
+			_documentEventListener.BeforeSave += OnBeforeDocumentSave;
 
-            if (_dte.RegistryRoot.Contains("VisualStudio")) {
-                _isCSharpEnabled = true;
-            }
+			if (_dte.RegistryRoot.Contains("VisualStudio")) {
+				_isCSharpEnabled = true;
+			}
 
-            _props = _dte.Properties["AStyle Formatter", "General"];
-            _props.Item("IsCSarpEnabled").Value = _isCSharpEnabled;
-        }
+			_props = _dte.Properties["AStyle Formatter", "General"];
+			_props.Item("IsCSarpEnabled").Value = _isCSharpEnabled;
+		}
 
-        private bool GetActiveDocument(out TextDocument textDoc, out string language) {
-            textDoc = null;
-            language = null;
+		private TextDocument GetTextDocument(Document doc) {
+			if (doc == null || doc.ReadOnly) {
+				return null;
+			}
 
-            _doc = _dte.ActiveDocument;
-            if (_doc == null) {
-                return false;
-            }
+			var textDoc = doc.Object("TextDocument") as TextDocument;
 
-            if (_doc.ReadOnly) {
-                return false;
-            }
+			return textDoc;
+		}
 
-            textDoc = _doc.Object("TextDocument") as TextDocument;
-            if (textDoc == null) {
-                return false;
-            }
+		private Language GetLanguage(Document doc) {
+			var language = Language.NA;
 
-            language = textDoc.Language.ToLower();
-            if (language != "gcc" && language != "avrgcc" && language != "c/c++" && (language != "csharp" || !_isCSharpEnabled)) {
-                return false;
-            }
+			string lang = doc.Language.ToLower();
+			if (lang == "gcc" || lang == "avrgcc" || lang == "c/c++") {
+				language = Language.Cpp;
+			} else if (lang == "csharp" && _isCSharpEnabled) {
+				language = Language.CSharp;
+			}
 
-            return true;
-        }
+			return language;
+		}
 
-        void OnBeforeQueryStatus(object sender, EventArgs e) {
-            var cmd = (OleMenuCommand)sender;
-            TextDocument textDoc;
-            string language;
-            
-            cmd.Visible = GetActiveDocument(out textDoc, out language);
-            cmd.Enabled = cmd.Visible;
-        }
+		private int OnBeforeDocumentSave(uint docCookie) {
+			bool csFormatOnSave = (bool)_props.Item("CsFormatOnSave").Value; ;
+			bool cppFormatOnSave = (bool)_props.Item("CppFormatOnSave").Value;
 
-        private void FormatDocumentCallback(object sender, EventArgs e) {
-            TextDocument textDoc;
-            string language;
+			if (!cppFormatOnSave && !csFormatOnSave) {
+				return VSConstants.S_OK;
+			}
 
-            if (!GetActiveDocument(out textDoc, out language)) {
-                return;
-            }
+			var doc = _dte.Documents.OfType<Document>().FirstOrDefault(x => x.FullName == _documentEventListener.GetDocumentName(docCookie));
+			var language = GetLanguage(doc);
 
-            EditPoint sp = textDoc.StartPoint.CreateEditPoint();
-            EditPoint ep = textDoc.EndPoint.CreateEditPoint();
-            string text = sp.GetText(ep);
+			if (language == Language.CSharp && csFormatOnSave) {
+				FormatDocument(GetTextDocument(doc), Language.CSharp);
+			} else if (language == Language.Cpp && cppFormatOnSave) {
+				FormatDocument(GetTextDocument(doc), Language.Cpp);
+			}
 
-            if (String.IsNullOrEmpty(text)) {
-                return;
-            }
+			return VSConstants.S_OK;
+		}
 
-            string formattedText = Format(text, language);
-            if (!String.IsNullOrEmpty(formattedText)) {
-                sp.ReplaceText(ep, formattedText, (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers);
-            }
-        }
+		private void OnBeforeQueryStatus(object sender, EventArgs e) {
+			var cmd = (OleMenuCommand)sender;
+			var language = GetLanguage(_dte.ActiveDocument);
 
-        private void FormatSelectionCallback(object sender, EventArgs e) {
-            TextDocument textDoc;
-            string language;
-            string newLineReplacement = "";
+			if (language != Language.CSharp && language != Language.Cpp) {
+				cmd.Visible = false;
+			} else {
+				cmd.Visible = true;
+			}
 
-            if (!GetActiveDocument(out textDoc, out language)) {
-                return;
-            }
+			cmd.Enabled = cmd.Visible;
+		}
 
-            if (textDoc.Selection.IsEmpty) {
-                return;
-            }
+		private void FormatDocumentCallback(object sender, EventArgs e) {
+			var language = GetLanguage(_dte.ActiveDocument);
+			var textDoc = GetTextDocument(_dte.ActiveDocument);
 
-            EditPoint sp = textDoc.Selection.TopPoint.CreateEditPoint();
-            EditPoint ep = textDoc.Selection.BottomPoint.CreateEditPoint();
+			FormatDocument(textDoc, language);
+		}
 
-            string text = textDoc.Selection.Text;
+		private void FormatDocument(TextDocument textDoc, Language language) {
+			if (textDoc == null || language == Language.NA) {
+				return;
+			}
 
-            int pos = 0;
-            foreach (var c in text) {
-                pos++;
-                if (c != ' ' && c != '\t') {
-                    break;
-                }
-            }
+			EditPoint sp = textDoc.StartPoint.CreateEditPoint();
+			EditPoint ep = textDoc.EndPoint.CreateEditPoint();
+			string text = sp.GetText(ep);
 
-            if (pos > 0) {
-                newLineReplacement = text.Substring(0, pos - 1);
-            }
+			if (String.IsNullOrEmpty(text)) {
+				return;
+			}
 
-            string formattedText = Format(text, language);
+			string formattedText = Format(text, language);
+			if (!String.IsNullOrEmpty(formattedText)) {
+				sp.ReplaceText(ep, formattedText, (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers);
+			}
+		}
 
-            if (!String.IsNullOrEmpty(newLineReplacement)) {
-                string[] lines = Regex.Split(formattedText, "\r\n|\r|\n");
+		private void FormatSelectionCallback(object sender, EventArgs e) {
+			var language = GetLanguage(_dte.ActiveDocument);
+			var textDoc = GetTextDocument(_dte.ActiveDocument);
 
-                for (int x = 0; x < lines.Length; x++) {
-                    if (!string.IsNullOrEmpty(lines[x])) {
-                        lines[x] = newLineReplacement + lines[x];
-                    }
-                }
+			FormatSelection(textDoc, language);
+		}
 
-                formattedText = String.Join(Environment.NewLine, lines);
-            }
+		private void FormatSelection(TextDocument textDoc, Language language) {
+			if (textDoc == null || language == Language.NA) {
+				return;
+			}
 
-            if (!String.IsNullOrEmpty(formattedText)) {
-                sp.ReplaceText(ep, formattedText, (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers);
-            }
-        }
+			string newLineReplacement = "";
 
-        string Format(string text, string language) {
-            string options;
+			if (textDoc.Selection.IsEmpty) {
+				return;
+			}
 
-            if (_props == null) {
-                MessageBox.Show("Unable to read AStyle Formatter settings.", "AStyle Formatter Error");
-                return null;
-            }
+			EditPoint sp = textDoc.Selection.TopPoint.CreateEditPoint();
+			EditPoint ep = textDoc.Selection.BottomPoint.CreateEditPoint();
 
-            if (_isCSharpEnabled && language == "csharp") {
-                options = (string)_props.Item("CsOptions").Value;
-            } else if (language == "c/c++" || language == "avrgcc" || language == "gcc") {
-                options = (string)_props.Item("CppOptions").Value;
-            } else {
-                return null;
-            }
+			string text = textDoc.Selection.Text;
 
-            if (String.IsNullOrEmpty(options)) {
-                return null;
-            }
+			int pos = 0;
+			foreach (var c in text) {
+				pos++;
+				if (c != ' ' && c != '\t') {
+					break;
+				}
+			}
 
-            var aStyle = new AStyleInterface();
-            aStyle.ErrorRaised += OnAStyleErrorRaised;
+			if (pos > 0) {
+				newLineReplacement = text.Substring(0, pos - 1);
+			}
 
-            return aStyle.FormatSource(text, options);
-        }
+			string formattedText = Format(text, language);
 
-        private void OnAStyleErrorRaised(object source, AStyleErrorArgs args) {
-            MessageBox.Show(args.Message, "AStyle Formatter Error");
-        }
-    }
+			if (!String.IsNullOrEmpty(newLineReplacement)) {
+				string[] lines = Regex.Split(formattedText, "\r\n|\r|\n");
+
+				for (int x = 0; x < lines.Length; x++) {
+					if (!string.IsNullOrEmpty(lines[x])) {
+						lines[x] = newLineReplacement + lines[x];
+					}
+				}
+
+				formattedText = String.Join(Environment.NewLine, lines);
+			}
+
+			if (!String.IsNullOrEmpty(formattedText)) {
+				sp.ReplaceText(ep, formattedText, (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers);
+			}
+		}
+
+		private string Format(string text, Language language) {
+			string options;
+
+			if (_props == null) {
+				MessageBox.Show("Unable to read AStyle Formatter settings.", "AStyle Formatter Error");
+				return null;
+			}
+
+			if (language == Language.CSharp) {
+				options = (string)_props.Item("CsOptions").Value;
+			} else if (language == Language.Cpp) {
+				options = (string)_props.Item("CppOptions").Value;
+			} else {
+				return null;
+			}
+
+			if (String.IsNullOrEmpty(options)) {
+				return null;
+			}
+
+			var aStyle = new AStyleInterface();
+			aStyle.ErrorRaised += OnAStyleErrorRaised;
+
+			return aStyle.FormatSource(text, options);
+		}
+
+		private void OnAStyleErrorRaised(object source, AStyleErrorArgs args) {
+			MessageBox.Show(args.Message, "AStyle Formatter Error");
+		}
+	}
 }

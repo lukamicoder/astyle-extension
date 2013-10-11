@@ -1,20 +1,15 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace AStyleExtension {
     public sealed partial class AStyleEditForm : Form {
-        private Language _language;
-
         public AStyleEditForm(Language language) {
             InitializeComponent();
 
-            _language = language;
-
-            switch (_language) {
+            switch (language) {
                 case Language.CSharp:
                     Text = "Edit AStyle C# Command Line";
                     break;
-                case Language.C:
+                case Language.Cpp:
                     Text = "Edit AStyle C/C++ Command Line";
                     break;
             }

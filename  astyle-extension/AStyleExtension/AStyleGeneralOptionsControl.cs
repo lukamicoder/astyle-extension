@@ -8,6 +8,31 @@ namespace AStyleExtension {
         private string _cppOptions;
         private string _csOptions;
         private bool _isCSarpEnabled;
+        private bool _cppFormatOnSave;
+        private bool _csFormatOnSave;
+
+        public bool CppFormatOnSave {
+            get {
+                _cppFormatOnSave = checkBoxCppFormatOnSave.Checked;
+                return _cppFormatOnSave;
+
+            }
+            set {
+                _cppFormatOnSave = value;
+                checkBoxCppFormatOnSave.Checked = value;
+            }
+        }
+
+        public bool CsFormatOnSave {
+            get {
+                _csFormatOnSave = checkBoxCsFormatOnSave.Checked;
+                return _csFormatOnSave;
+            }
+            set {
+                _csFormatOnSave = value;
+                checkBoxCsFormatOnSave.Checked = value;
+            }
+        }
 
         public string CppOptions {
             get { return _cppOptions; }
@@ -44,7 +69,7 @@ namespace AStyleExtension {
         }
 
         private void OnButtonCPPSettingsClick(object sender, EventArgs e) {
-            var form = new AStyleSettingsForm(Language.C);
+            var form = new AStyleSettingsForm(Language.Cpp);
             form.SetControls(CppOptions);
 
             if (form.ShowDialog() != DialogResult.OK) {
@@ -68,7 +93,7 @@ namespace AStyleExtension {
         }
 
         private void OnButtonCPPEditClick(object sender, EventArgs e) {
-            var form = new AStyleEditForm(Language.C);
+            var form = new AStyleEditForm(Language.Cpp);
             form.SetCommandLine(CppOptions);
 
             if (form.ShowDialog() != DialogResult.OK) {
@@ -103,6 +128,8 @@ namespace AStyleExtension {
             var settings = new AStyleSettings {
                 CppCommandLine = CppOptions,
                 CsCommandLine = CsOptions,
+                CppFormatOnSave = CppFormatOnSave,
+                CsFormatOnSave = CsFormatOnSave,
                 Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()
             };
 
@@ -149,9 +176,13 @@ namespace AStyleExtension {
             }
 
             CppOptions = settings.CppCommandLine;
+            checkBoxCppFormatOnSave.Checked = settings.CppFormatOnSave;
+
             if (IsCSarpEnabled) {
                 CsOptions = settings.CsCommandLine;
+                checkBoxCsFormatOnSave.Checked = settings.CsFormatOnSave;
             }
+
 
             textBoxDetails.Text = String.Format("Your settings were successfully imported from {0}.{1}Click OK to save the changes.", openFileDialog.FileName, Environment.NewLine);
         }
