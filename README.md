@@ -10,13 +10,14 @@ Supported Visual Studio editions:
     Visual Studio 2010 Professional (or above)
     Visual Studio 2012 Professional (or above)
     Visual Studio 2013 Professional (or above)
+    Visual Studio 2015 Professional (or above)
     AVR Studio 5
     Atmel Studio 6
 
 
 
 Changelog:
-
+    Version 2.5 (November 18 2014) - Upgraded GUI to Artistic Style 2.0.5; Added support to Visual Studio 2015.
     Version 2.3 (November 18 2013) - Upgraded to Artistic Style 2.0.4.
     Version 2.2 (October 10 2013) - Added Format on Save option.
     Version 2.1 (September 17 2013) - Added support for Visual Studio 2013.
