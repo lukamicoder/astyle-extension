@@ -3,7 +3,7 @@
     <Identifier Id="6b52ccde-8ae4-4233-bccd-6b9b0ba06a56">
         <Name>AStyle Extension</Name>
         <Author>Lukamicoder</Author>
-        <Version>2.4</Version>
+        <Version>2.5</Version>
         <Description xml:space="preserve">An extension for Artistic Style.</Description>
         <Locale>1033</Locale>
         <License>Resources\License.txt</License>
@@ -18,6 +18,9 @@
                 <Edition>Pro</Edition>
             </VisualStudio>
             <VisualStudio Version="12.0">
+                <Edition>Pro</Edition>
+            </VisualStudio>
+            <VisualStudio Version="14.0">
                 <Edition>Pro</Edition>
             </VisualStudio>
             <IsolatedShell Version="5.0">AvrStudio</IsolatedShell>

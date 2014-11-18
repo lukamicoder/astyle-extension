@@ -24,6 +24,7 @@ namespace AStyleExtension {
 			{ "--style=kr", "K&R" },
 			{ "--style=stroustrup", "Stroustrup" },
 			{ "--style=whitesmith", "Whitesmith" },
+			{ "--style=vtk", "VTK" },
 			{ "--style=banner", "Banner" },
 			{ "--style=gnu", "GNU" },
 			{ "--style=linux", "Linux" },
@@ -60,6 +61,7 @@ namespace AStyleExtension {
 				{ "--indent-labels", checkBoxIndentLabels },
 				{ "--indent-preproc-cond", checkBoxIndentPreprocCond },
 				{ "--indent-preproc-define", checkBoxIndentPreprocDefine },
+				{ "--indent-preproc-block", checkBoxIndentPreprocBlock },
 				{ "--indent-col1-comments", checkBoxIndentCol1Com },
 				{ "--break-blocks", checkBoxBreakBlocks },
 				{ "--break-blocks=all", checkBoxBreakBlocksAll },
@@ -72,7 +74,7 @@ namespace AStyleExtension {
 				{ "--unpad-paren", checkBoxUnpadParen },
 				{ "--delete-empty-lines", checkBoxDelEmptyLines },
 				{ "--fill-empty-lines", checkBoxFillEmptyLines },
-                { "--close-templates", checkBoxCloseTemplates },
+				{ "--close-templates", checkBoxCloseTemplates },
 				{ "--break-closing-brackets", checkBoxBreakClosingBrackets },
 				{ "--break-elseifs", checkBoxBreakElseIfs },
 				{ "--add-brackets", checkBoxAddBrackets },
@@ -98,6 +100,7 @@ namespace AStyleExtension {
 			toolTip.SetToolTip(checkBoxIndentNamesp, "Add extra indentation to namespace blocks.");
 			toolTip.SetToolTip(checkBoxIndentLabels, "Add extra indentation to labels so they appear 1 indent less than the current indentation.");
 			toolTip.SetToolTip(checkBoxIndentPreprocDefine, "Indent preprocessor conditional statements to the same level as the source code.");
+			toolTip.SetToolTip(checkBoxIndentPreprocBlock, "Indent preprocessor blocks at bracket level zero, and immediately within a namespace.");
 			toolTip.SetToolTip(checkBoxIndentPreprocCond, "Indent multi-line preprocessor definitions ending with a backslash.");
 			toolTip.SetToolTip(checkBoxIndentCol1Com, "Indent C++ comments beginning in column one.");
 			toolTip.SetToolTip(checkBoxMinCondIndent, "Set the minimal indent that is added when a header is built of multiple lines.");
@@ -112,14 +115,14 @@ namespace AStyleExtension {
 			toolTip.SetToolTip(checkBoxPadHeader, "Insert space padding after paren headers only (e.g. 'if', 'for', 'while').");
 			toolTip.SetToolTip(checkBoxUnpadParen, "Remove extra space padding around parenthesis on the inside and outside.");
 			toolTip.SetToolTip(checkBoxDelEmptyLines, "Delete empty lines within a function or method. Empty lines outside of functions or methods are not deleted.");
-            toolTip.SetToolTip(checkBoxFillEmptyLines, "Fill empty lines with the white space of the previous line.");
-            toolTip.SetToolTip(checkBoxCloseTemplates, "Close whitespace in the angle brackets of template definitions.");
-            toolTip.SetToolTip(checkBoxBreakClosingBrackets, "Break closing headers (e.g. 'else', 'catch') from their immediately preceding closing brackets.");
+			toolTip.SetToolTip(checkBoxFillEmptyLines, "Fill empty lines with the white space of the previous line.");
+			toolTip.SetToolTip(checkBoxCloseTemplates, "Close whitespace in the angle brackets of template definitions.");
+			toolTip.SetToolTip(checkBoxBreakClosingBrackets, "Break closing headers (e.g. 'else', 'catch') from their immediately preceding closing brackets.");
 			toolTip.SetToolTip(checkBoxBreakElseIfs, "Break 'else if' header combinations into separate lines.");
 			toolTip.SetToolTip(checkBoxAddBrackets, "Add brackets to unbracketed one line conditional statements (e.g. 'if', 'for', 'while').");
 			toolTip.SetToolTip(checkBoxRemoveBrackets, "Remove brackets from one line conditional statements (e.g. 'if', 'for', 'while').");
 			toolTip.SetToolTip(checkBoxAddOneLineBrackets, "Add one line brackets to unbracketed one line conditional statements  (e.g. 'if', 'for', 'while').");
-            toolTip.SetToolTip(checkBoxKeepOneLineBlocks, "Don't break blocks residing completely on one line.");
+			toolTip.SetToolTip(checkBoxKeepOneLineBlocks, "Don't break blocks residing completely on one line.");
 			toolTip.SetToolTip(checkBoxKeepOneLineStat, "Don't break complex statements and multiple statements residing on a single line.");
 			toolTip.SetToolTip(checkBoxConvertTabs, "Convert tabs into spaces in the non-indentation part of the line.");
 			toolTip.SetToolTip(checkBoxAlignPointer, "Attach a pointer or reference operator (* or &) to either the variable type or variable name, or in between.");
@@ -149,7 +152,7 @@ namespace AStyleExtension {
 				case Language.Cpp:
 					comboBoxMode.SelectedIndex = 0;
 					checkBoxAttachExternC.Visible = true;
-                    checkBoxAttachInlines.Visible = true;
+					checkBoxAttachInlines.Visible = true;
 					break;
 			}
 
@@ -363,7 +366,7 @@ namespace AStyleExtension {
 		}
 
 		private void OnComboBoxIndentSelectedIndexChanged(object sender, EventArgs e) {
-			var combo = (ComboBox) sender;
+			var combo = (ComboBox)sender;
 
 			if ((string)combo.SelectedItem == "force-tab") {
 				checkBoxIndentForceTabX.Enabled = true;
