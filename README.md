@@ -18,6 +18,7 @@ Supported Visual Studio editions:
 
 Changelog:
 
+    Version 2.6 (June 27 2015) - Fixed: out-of-range values no longer crash VS. Upgraded to Artistic Style 2.05.1.
     Version 2.5 (November 18 2014) - Upgraded GUI to Artistic Style 2.0.5; Added support to Visual Studio 2015.
     Version 2.3 (November 18 2013) - Upgraded to Artistic Style 2.0.4.
     Version 2.2 (October 10 2013) - Added Format on Save option.
