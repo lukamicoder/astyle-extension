@@ -10,6 +10,7 @@ namespace AStyleExtension {
         private bool _isCSarpEnabled;
         private bool _cppFormatOnSave;
         private bool _csFormatOnSave;
+        private string _cppIgnoredExtensions;
 
         public bool CppFormatOnSave {
             get {
@@ -58,6 +59,16 @@ namespace AStyleExtension {
                     tabControlOptions.TabPages.Remove(tabPageCS);
                 }
             }
+        }
+        public string CppIgnoredFileExtensions {
+            get
+            {
+                _cppIgnoredExtensions = txtIgnoredExtensions.Text;
+                return _cppIgnoredExtensions;
+            }
+            set {
+                _cppIgnoredExtensions = value;
+                txtIgnoredExtensions.Text = _cppIgnoredExtensions; }
         }
 
         public AStyleGeneralOptionsControl() {
@@ -130,6 +141,7 @@ namespace AStyleExtension {
                 CsCommandLine = CsOptions,
                 CppFormatOnSave = CppFormatOnSave,
                 CsFormatOnSave = CsFormatOnSave,
+                CppIgnoredFileExtensions = CppIgnoredFileExtensions,
                 Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()
             };
 
@@ -177,6 +189,7 @@ namespace AStyleExtension {
 
             CppOptions = settings.CppCommandLine;
             checkBoxCppFormatOnSave.Checked = settings.CppFormatOnSave;
+            CppIgnoredFileExtensions = settings.CppIgnoredFileExtensions;
 
             if (IsCSarpEnabled) {
                 CsOptions = settings.CsCommandLine;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
@@ -79,12 +80,24 @@ namespace AStyleExtension {
 		private int OnBeforeDocumentSave(uint docCookie) {
 			bool csFormatOnSave = (bool)_props.Item("CsFormatOnSave").Value; ;
 			bool cppFormatOnSave = (bool)_props.Item("CppFormatOnSave").Value;
+            string cppIgnoredExtensions = (string)_props.Item("CppIgnoredFileExtensions").Value;
 
 			if (!cppFormatOnSave && !csFormatOnSave) {
 				return VSConstants.S_OK;
 			}
 
-			var doc = _dte.Documents.OfType<Document>().FirstOrDefault(x => x.FullName == _documentEventListener.GetDocumentName(docCookie));
+            var doc = _dte.Documents.OfType<Document>().FirstOrDefault(x => x.FullName == _documentEventListener.GetDocumentName(docCookie));
+            //check ignored extensions
+            if (!string.IsNullOrEmpty(cppIgnoredExtensions))
+            {
+                List<string> fileExtensionsList = new List<string>();
+                fileExtensionsList.AddRange(cppIgnoredExtensions.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                string ext = System.IO.Path.GetExtension(doc.FullName);
+                if (fileExtensionsList.Contains(ext))
+                {
+                    return VSConstants.S_OK;
+                }
+            }
 			var language = GetLanguage(doc);
 
 			if (language == Language.CSharp && csFormatOnSave) {

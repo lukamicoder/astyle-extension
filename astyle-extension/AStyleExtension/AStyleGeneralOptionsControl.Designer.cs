@@ -41,10 +41,13 @@
             this.textBoxDetails = new System.Windows.Forms.TextBox();
             this.buttonImport = new System.Windows.Forms.Button();
             this.buttonExport = new System.Windows.Forms.Button();
+            this.txtIgnoredExtensions = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tabControlOptions.SuspendLayout();
             this.tabPageCPP.SuspendLayout();
             this.tabPageCS.SuspendLayout();
             this.tabPageImport.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlOptions
@@ -60,6 +63,7 @@
             // 
             // tabPageCPP
             // 
+            this.tabPageCPP.Controls.Add(this.groupBox2);
             this.tabPageCPP.Controls.Add(this.checkBoxCppFormatOnSave);
             this.tabPageCPP.Controls.Add(this.buttonCPPEdit);
             this.tabPageCPP.Controls.Add(this.labelCPP);
@@ -96,7 +100,7 @@
             // labelCPP
             // 
             this.labelCPP.AutoSize = true;
-            this.labelCPP.Location = new System.Drawing.Point(7, 40);
+            this.labelCPP.Location = new System.Drawing.Point(9, 114);
             this.labelCPP.Name = "labelCPP";
             this.labelCPP.Size = new System.Drawing.Size(76, 13);
             this.labelCPP.TabIndex = 4;
@@ -104,12 +108,12 @@
             // 
             // textBoxCPP
             // 
-            this.textBoxCPP.Location = new System.Drawing.Point(10, 56);
+            this.textBoxCPP.Location = new System.Drawing.Point(10, 130);
             this.textBoxCPP.Multiline = true;
             this.textBoxCPP.Name = "textBoxCPP";
             this.textBoxCPP.ReadOnly = true;
             this.textBoxCPP.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxCPP.Size = new System.Drawing.Size(368, 190);
+            this.textBoxCPP.Size = new System.Drawing.Size(368, 116);
             this.textBoxCPP.TabIndex = 3;
             // 
             // buttonCPPSettings
@@ -239,6 +243,24 @@
             this.buttonExport.UseVisualStyleBackColor = true;
             this.buttonExport.Click += new System.EventHandler(this.OnButtonExportClick);
             // 
+            // txtIgnoredExtensions
+            // 
+            this.txtIgnoredExtensions.Location = new System.Drawing.Point(6, 29);
+            this.txtIgnoredExtensions.Name = "txtIgnoredExtensions";
+            this.txtIgnoredExtensions.Size = new System.Drawing.Size(354, 20);
+            this.txtIgnoredExtensions.TabIndex = 0;
+            this.txtIgnoredExtensions.Text = ".re  .y";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.txtIgnoredExtensions);
+            this.groupBox2.Location = new System.Drawing.Point(12, 35);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(366, 67);
+            this.groupBox2.TabIndex = 15;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Ignored Extensions";
+            // 
             // AStyleGeneralOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -253,6 +275,8 @@
             this.tabPageCS.PerformLayout();
             this.tabPageImport.ResumeLayout(false);
             this.tabPageImport.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -277,6 +301,8 @@
         private System.Windows.Forms.TextBox textBoxDetails;
         private System.Windows.Forms.CheckBox checkBoxCppFormatOnSave;
         private System.Windows.Forms.CheckBox checkBoxCsFormatOnSave;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TextBox txtIgnoredExtensions;
 
 
     }

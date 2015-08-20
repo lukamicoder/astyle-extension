@@ -14,6 +14,7 @@ namespace AStyleExtension {
         public bool CppFormatOnSave { get; set; }
         public bool CsFormatOnSave { get; set; }
         public bool IsCSarpEnabled { get; set; }
+        public string CppIgnoredFileExtensions { get; set; }
 
         public AStyleGeneralOptionsPage() {
             IsCSarpEnabled = true;
@@ -26,6 +27,7 @@ namespace AStyleExtension {
 
                 if (CppOptions != null) {
                     _control.CppOptions = CppOptions;
+                    
                 }
 
                 if (CsOptions != null) {
@@ -35,6 +37,10 @@ namespace AStyleExtension {
                 _control.IsCSarpEnabled = IsCSarpEnabled;
                 _control.CppFormatOnSave = CppFormatOnSave;
                 _control.CsFormatOnSave = CsFormatOnSave;
+                if (!string.IsNullOrEmpty(CppIgnoredFileExtensions))
+                    _control.CppIgnoredFileExtensions = CppIgnoredFileExtensions;
+                else
+                    _control.CppIgnoredFileExtensions = "";
 
                 return _control;
             }
@@ -46,6 +52,7 @@ namespace AStyleExtension {
                 CsOptions = _control.CsOptions;
                 CppFormatOnSave = _control.CppFormatOnSave;
                 CsFormatOnSave = _control.CsFormatOnSave;
+                CppIgnoredFileExtensions = _control.CppIgnoredFileExtensions;
             }
 
             base.OnDeactivate(e);           
@@ -57,7 +64,7 @@ namespace AStyleExtension {
                 _control.CsOptions = CsOptions;
                 _control.CppFormatOnSave = CppFormatOnSave;
                 _control.CsFormatOnSave = CsFormatOnSave;
-
+                _control.CppIgnoredFileExtensions = CppIgnoredFileExtensions;
                 _control.ClearDetails();
             }
 
@@ -70,6 +77,7 @@ namespace AStyleExtension {
                 CsOptions = _control.CsOptions;
                 CppFormatOnSave = _control.CppFormatOnSave;
                 CsFormatOnSave = _control.CsFormatOnSave;
+                CppIgnoredFileExtensions = _control.CppIgnoredFileExtensions;
             }
 
             base.OnApply(e);

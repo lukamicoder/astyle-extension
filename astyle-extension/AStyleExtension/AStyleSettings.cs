@@ -8,5 +8,6 @@ namespace AStyleExtension {
         public string CppCommandLine { get; set; }
         public string CsCommandLine { get; set; }
         public string Version { get; set; }
+        public string CppIgnoredFileExtensions { get; set; }
     }
 }
