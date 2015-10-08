@@ -3,7 +3,7 @@
     <Identifier Id="6b52ccde-8ae4-4233-bccd-6b9b0ba06a56">
         <Name>AStyle Extension</Name>
         <Author>Lukamicoder</Author>
-        <Version>2.6</Version>
+        <Version>2.7</Version>
         <Description xml:space="preserve">An extension for Artistic Style.</Description>
         <Locale>1033</Locale>
         <License>Resources\License.txt</License>
@@ -28,6 +28,7 @@
             <IsolatedShell Version="6.0">AtmelStudio</IsolatedShell>
             <IsolatedShell Version="6.1">AtmelStudio</IsolatedShell>
             <IsolatedShell Version="6.2">AtmelStudio</IsolatedShell>
+            <IsolatedShell Version="7.0">AtmelStudio</IsolatedShell>
         </SupportedProducts>
         <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.0" />
     </Identifier>

@@ -58,8 +58,9 @@ namespace AStyleExtension {
 				{ "--indent-cases", checkBoxIndentCases },
 				{ "--indent-namespaces", checkBoxIndentNamesp },
 				{ "--indent-labels", checkBoxIndentLabels },
-				{ "--indent-preproc-cond", checkBoxIndentPreprocCond },
+				{ "--indent-preproc-block", checkBoxIndentPreprocBlock },
 				{ "--indent-preproc-define", checkBoxIndentPreprocDefine },
+				{ "--indent-preproc-cond", checkBoxIndentPreprocCond },
 				{ "--indent-col1-comments", checkBoxIndentCol1Com },
 				{ "--break-blocks", checkBoxBreakBlocks },
 				{ "--break-blocks=all", checkBoxBreakBlocksAll },
@@ -97,8 +98,9 @@ namespace AStyleExtension {
 			toolTip.SetToolTip(checkBoxIndentCases, "Indent 'case X:' blocks from the 'case X:' headers.");
 			toolTip.SetToolTip(checkBoxIndentNamesp, "Add extra indentation to namespace blocks.");
 			toolTip.SetToolTip(checkBoxIndentLabels, "Add extra indentation to labels so they appear 1 indent less than the current indentation.");
-			toolTip.SetToolTip(checkBoxIndentPreprocDefine, "Indent preprocessor conditional statements to the same level as the source code.");
-			toolTip.SetToolTip(checkBoxIndentPreprocCond, "Indent multi-line preprocessor definitions ending with a backslash.");
+			toolTip.SetToolTip(checkBoxIndentPreprocBlock, "Indent preprocessor blocks at bracket level zero, and immediately within a namespace.");
+			toolTip.SetToolTip(checkBoxIndentPreprocDefine, "Indent multi-line preprocessor definitions ending with a backslash.");
+			toolTip.SetToolTip(checkBoxIndentPreprocCond, "Indent preprocessor conditional statements to the same level as the source code.");
 			toolTip.SetToolTip(checkBoxIndentCol1Com, "Indent C++ comments beginning in column one.");
 			toolTip.SetToolTip(checkBoxMinCondIndent, "Set the minimal indent that is added when a header is built of multiple lines.");
 			toolTip.SetToolTip(checkBoxMaxInstateIndent, "Set the maximum number of spaces to indent a continuation line.");
@@ -388,7 +390,7 @@ namespace AStyleExtension {
 		}
 
 		private void OnComboBoxIndentSelectedIndexChanged(object sender, EventArgs e) {
-			var combo = (ComboBox) sender;
+			var combo = (ComboBox)sender;
 
 			if ((string)combo.SelectedItem == "force-tab") {
 				checkBoxIndentForceTabX.Enabled = true;
