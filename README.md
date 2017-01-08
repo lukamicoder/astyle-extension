@@ -19,9 +19,10 @@ Supported Visual Studio editions:
 
 Changelog:
 
+    Version 2.8 (January 08 2017) - Upgraded GUI to Artistic Style 2.0.6; Added preliminary support for Visual Studio 2017.
     Version 2.7 (October 7 2015) - Fixed --indent-preproc-block checkbox. Added support for Atmel Studio 7.0.
     Version 2.6 (June 27 2015) - Fixed: out-of-range values no longer crash VS. Upgraded to Artistic Style 2.05.1.
-    Version 2.5 (November 18 2014) - Upgraded GUI to Artistic Style 2.0.5; Added support to Visual Studio 2015.
+    Version 2.5 (November 18 2014) - Upgraded GUI to Artistic Style 2.0.5; Added support for Visual Studio 2015.
     Version 2.3 (November 18 2013) - Upgraded to Artistic Style 2.0.4.
     Version 2.2 (October 10 2013) - Added Format on Save option.
     Version 2.1 (September 17 2013) - Added support for Visual Studio 2013.
