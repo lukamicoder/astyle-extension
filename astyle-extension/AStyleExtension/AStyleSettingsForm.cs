@@ -30,6 +30,7 @@ namespace AStyleExtension {
 			{ "--style=horstmann", "Horstmann" },
 			{ "--style=1tbs", "1TBS" },
 			{ "--style=google", "Google" },
+			{ "--style=mozilla", "Mozilla" },
 			{ "--style=pico", "Pico" },
 			{ "--style=lisp", "Lisp" }
 		};
@@ -65,6 +66,7 @@ namespace AStyleExtension {
 				{ "--break-blocks", checkBoxBreakBlocks },
 				{ "--break-blocks=all", checkBoxBreakBlocksAll },
 				{ "--pad-oper", checkBoxPadOper },
+				{ "--pad-comma", checkBoxPadComma },
 				{ "--pad-paren", checkBoxPadParen },
 				{ "--pad-paren-out", checkBoxPadParenOut },
 				{ "--pad-paren-in", checkBoxPadParenIn },
@@ -76,6 +78,7 @@ namespace AStyleExtension {
 				{ "--close-templates", checkBoxCloseTemplates },
 				{ "--break-closing-brackets", checkBoxBreakClosingBrackets },
 				{ "--break-elseifs", checkBoxBreakElseIfs },
+				{ "--break-one-line-headers", checkBoxBreakOneLineHeaders },
 				{ "--add-brackets", checkBoxAddBrackets },
 				{ "--remove-brackets", checkBoxRemoveBrackets },
 				{ "--add-one-line-brackets", checkBoxAddOneLineBrackets },
@@ -98,6 +101,7 @@ namespace AStyleExtension {
 			toolTip.SetToolTip(checkBoxIndentCases, "Indent 'case X:' blocks from the 'case X:' headers.");
 			toolTip.SetToolTip(checkBoxIndentNamesp, "Add extra indentation to namespace blocks.");
 			toolTip.SetToolTip(checkBoxIndentLabels, "Add extra indentation to labels so they appear 1 indent less than the current indentation.");
+			toolTip.SetToolTip(checkBoxIndentContinuation, "Set the continuation indent for a line that ends with an opening paren '(' or an assignment '='.");
 			toolTip.SetToolTip(checkBoxIndentPreprocBlock, "Indent preprocessor blocks at bracket level zero, and immediately within a namespace.");
 			toolTip.SetToolTip(checkBoxIndentPreprocDefine, "Indent multi-line preprocessor definitions ending with a backslash.");
 			toolTip.SetToolTip(checkBoxIndentPreprocCond, "Indent preprocessor conditional statements to the same level as the source code.");
@@ -107,6 +111,7 @@ namespace AStyleExtension {
 			toolTip.SetToolTip(checkBoxBreakBlocks, "Pad empty lines around header blocks (e.g. 'if', 'for', 'while').");
 			toolTip.SetToolTip(checkBoxBreakBlocksAll, "Pad empty lines around header blocks (e.g. 'if', 'for', 'while'). Treat closing header blocks (e.g. 'else', 'catch') as stand-alone blocks.");
 			toolTip.SetToolTip(checkBoxPadOper, "Insert space padding around operators.");
+			toolTip.SetToolTip(checkBoxPadComma, "Insert space padding after commas.");
 			toolTip.SetToolTip(checkBoxPadParen, "Insert space padding around parenthesis on both the outside and the inside.");
 			toolTip.SetToolTip(checkBoxPadParenOut, "Insert space padding around parenthesis on the outside only.");
 			toolTip.SetToolTip(checkBoxPadFirstParenOut, "Insert space padding around the first parenthesis in a series on the outside only.");
@@ -118,6 +123,7 @@ namespace AStyleExtension {
 			toolTip.SetToolTip(checkBoxCloseTemplates, "Close whitespace in the angle brackets of template definitions.");
 			toolTip.SetToolTip(checkBoxBreakClosingBrackets, "Break closing headers (e.g. 'else', 'catch') from their immediately preceding closing brackets.");
 			toolTip.SetToolTip(checkBoxBreakElseIfs, "Break 'else if' header combinations into separate lines.");
+			toolTip.SetToolTip(checkBoxBreakOneLineHeaders, "Break one line headers (e.g. 'if', 'while', 'else', ...) from a statement residing on the same line.");
 			toolTip.SetToolTip(checkBoxAddBrackets, "Add brackets to unbracketed one line conditional statements (e.g. 'if', 'for', 'while').");
 			toolTip.SetToolTip(checkBoxRemoveBrackets, "Remove brackets from one line conditional statements (e.g. 'if', 'for', 'while').");
 			toolTip.SetToolTip(checkBoxAddOneLineBrackets, "Add one line brackets to unbracketed one line conditional statements  (e.g. 'if', 'for', 'while').");
@@ -228,6 +234,20 @@ namespace AStyleExtension {
 						numericUpDownMaxInstateIndent.Value = no;
 						checkBoxMaxInstateIndent.Checked = true;
 					}
+				} else if (option.StartsWith("--indent-continuation=")) {
+					pos = option.LastIndexOf("=", StringComparison.Ordinal);
+
+					if (int.TryParse(option.Substring(pos + 1), out no)) {
+						if (no < 0) {
+							no = 0;
+						}
+						if (no > 4) {
+							no = 4;
+						}
+
+						numericUpDownIndentContinuation.Value = no;
+						checkBoxIndentContinuation.Checked = true;
+					}
 				} else if (option.StartsWith("--align-pointer=")) {
 					pos = option.LastIndexOf("=", StringComparison.Ordinal);
 					comboBoxAlignPointer.SelectedItem = option.Substring(pos + 1);
@@ -284,6 +304,10 @@ namespace AStyleExtension {
 
 			if (checkBoxMaxInstateIndent.Checked) {
 				sb.Append("--max-instatement-indent=").Append(numericUpDownMaxInstateIndent.Value).Append(" ");
+			}
+
+			if (checkBoxIndentContinuation.Checked) {
+				sb.Append("--indent-continuation=").Append(numericUpDownIndentContinuation.Value).Append(" ");
 			}
 
 			if (checkBoxAlignPointer.Checked) {
@@ -374,6 +398,15 @@ namespace AStyleExtension {
 			} else {
 				comboBoxAlignReference.SelectedIndex = 0;
 				comboBoxAlignReference.Enabled = false;
+			}
+		}
+
+		private void OnCheckBoxIndentContinuationCheckedChanged(object sender, EventArgs e) {
+			if (((CheckBox)sender).Checked) {
+				numericUpDownIndentContinuation.Enabled = true;
+			} else {
+				numericUpDownIndentContinuation.Value = 1;
+				numericUpDownIndentContinuation.Enabled = false;
 			}
 		}
 
