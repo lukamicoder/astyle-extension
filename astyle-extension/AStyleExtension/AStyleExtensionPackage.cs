@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Shell;
 
 namespace AStyleExtension {
 	[PackageRegistration(UseManagedResourcesOnly = true)]
-	[InstalledProductRegistration("#110", "#112", "2.8", IconResourceID = 400)]
+	[InstalledProductRegistration("#110", "#112", "3.0", IconResourceID = 400)]
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[ProvideOptionPage(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1000, 1001, true)]
 	[ProvideProfileAttribute(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1002, 1003, true)]
@@ -21,8 +21,8 @@ namespace AStyleExtension {
 		private OleMenuCommand _formatSelMenuCommand;
 		private OleMenuCommand _formatDocMenuCommand;
 		private bool _isCSharpEnabled;
-		private Properties _props;
-		private DocumentEventListener _documentEventListener;
+        private AStyleGeneralOptionsPage _dialog;
+        private DocumentEventListener _documentEventListener;
 
 		protected override void Initialize() {
 			base.Initialize();
@@ -47,11 +47,11 @@ namespace AStyleExtension {
 
 			if (_dte.RegistryRoot.Contains("VisualStudio")) {
 				_isCSharpEnabled = true;
-			}
+            }
 
-			_props = _dte.Properties["AStyle Formatter", "General"];
-			_props.Item("IsCSarpEnabled").Value = _isCSharpEnabled;
-		}
+            _dialog = (AStyleGeneralOptionsPage)GetDialogPage(typeof(AStyleGeneralOptionsPage));
+            _dialog.IsCSarpEnabled = _isCSharpEnabled;
+        }
 
 		private TextDocument GetTextDocument(Document doc) {
 			if (doc == null || doc.ReadOnly) {
@@ -77,24 +77,21 @@ namespace AStyleExtension {
 		}
 
 		private int OnBeforeDocumentSave(uint docCookie) {
-			bool csFormatOnSave = (bool)_props.Item("CsFormatOnSave").Value; ;
-			bool cppFormatOnSave = (bool)_props.Item("CppFormatOnSave").Value;
+            if (!_dialog.CppFormatOnSave && !_dialog.CsFormatOnSave) {
+                return VSConstants.S_OK;
+            }
 
-			if (!cppFormatOnSave && !csFormatOnSave) {
-				return VSConstants.S_OK;
-			}
+            var doc = _dte.Documents.OfType<Document>().FirstOrDefault(x => x.FullName == _documentEventListener.GetDocumentName(docCookie));
+            var language = GetLanguage(doc);
 
-			var doc = _dte.Documents.OfType<Document>().FirstOrDefault(x => x.FullName == _documentEventListener.GetDocumentName(docCookie));
-			var language = GetLanguage(doc);
+            if (language == Language.CSharp && _dialog.CsFormatOnSave) {
+                FormatDocument(GetTextDocument(doc), Language.CSharp);
+            } else if (language == Language.Cpp && _dialog.CppFormatOnSave) {
+                FormatDocument(GetTextDocument(doc), Language.Cpp);
+            }
 
-			if (language == Language.CSharp && csFormatOnSave) {
-				FormatDocument(GetTextDocument(doc), Language.CSharp);
-			} else if (language == Language.Cpp && cppFormatOnSave) {
-				FormatDocument(GetTextDocument(doc), Language.Cpp);
-			}
-
-			return VSConstants.S_OK;
-		}
+            return VSConstants.S_OK;
+        }
 
 		private void OnBeforeQueryStatus(object sender, EventArgs e) {
 			var cmd = (OleMenuCommand)sender;
@@ -192,15 +189,15 @@ namespace AStyleExtension {
 		private string Format(string text, Language language) {
 			string options;
 
-			if (_props == null) {
+			if (_dialog == null) {
 				MessageBox.Show("Unable to read AStyle Formatter settings.", "AStyle Formatter Error");
 				return null;
 			}
 
 			if (language == Language.CSharp) {
-				options = (string)_props.Item("CsOptions").Value;
-			} else if (language == Language.Cpp) {
-				options = (string)_props.Item("CppOptions").Value;
+                options = _dialog.CsOptions;
+            } else if (language == Language.Cpp) {
+				options = _dialog.CppOptions;
 			} else {
 				return null;
 			}

@@ -24,7 +24,8 @@ namespace AStyleExtension {
 			{ "--style=kr", "K&R" },
 			{ "--style=stroustrup", "Stroustrup" },
 			{ "--style=whitesmith", "Whitesmith" },
-			{ "--style=banner", "Banner" },
+            { "--style=vtk", "VTK" },
+            { "--style=banner", "Banner" },
 			{ "--style=gnu", "GNU" },
 			{ "--style=linux", "Linux" },
 			{ "--style=horstmann", "Horstmann" },
@@ -53,12 +54,14 @@ namespace AStyleExtension {
 				{ "--attach-classes", checkBoxAttachClasses },
 				{ "--attach-inlines", checkBoxAttachInlines },
 				{ "--attach-extern-c", checkBoxAttachExternC },
-				{ "--indent-classes", checkBoxIndentClasses },
+                { "--attach-closing-while", checkBoxAttachClosingWhile },
+                { "--indent-classes", checkBoxIndentClasses },
 				{ "--indent-modifiers", checkBoxIndentModifiers },
 				{ "--indent-switches", checkBoxIndentSwitches },
 				{ "--indent-cases", checkBoxIndentCases },
 				{ "--indent-namespaces", checkBoxIndentNamesp },
-				{ "--indent-labels", checkBoxIndentLabels },
+                { "--indent-after-parens", checkBoxIndentAfterParens },
+                { "--indent-labels", checkBoxIndentLabels },
 				{ "--indent-preproc-block", checkBoxIndentPreprocBlock },
 				{ "--indent-preproc-define", checkBoxIndentPreprocDefine },
 				{ "--indent-preproc-cond", checkBoxIndentPreprocCond },
@@ -76,7 +79,7 @@ namespace AStyleExtension {
 				{ "--delete-empty-lines", checkBoxDelEmptyLines },
 				{ "--fill-empty-lines", checkBoxFillEmptyLines },
 				{ "--close-templates", checkBoxCloseTemplates },
-				{ "--break-closing-brackets", checkBoxBreakClosingBrackets },
+				{ "--break-closing-braces", checkBoxBreakClosingBraces },
 				{ "--break-elseifs", checkBoxBreakElseIfs },
 				{ "--break-one-line-headers", checkBoxBreakOneLineHeaders },
 				{ "--add-brackets", checkBoxAddBrackets },
@@ -92,15 +95,17 @@ namespace AStyleExtension {
 			toolTip.SetToolTip(checkBoxAttachNamespaces, "Attach brackets to a namespace statement.");
 			toolTip.SetToolTip(checkBoxAttachClasses, "Attach brackets to a class statement.");
 			toolTip.SetToolTip(checkBoxAttachInlines, "Attach brackets to class and struct inline function definition.");
-			toolTip.SetToolTip(checkBoxAttachExternC, "Attach brackets to a bracketed extern \"C\" statement.");
-			toolTip.SetToolTip(checkBoxIndent, "Indent using spaces or tab characters.");
+            toolTip.SetToolTip(checkBoxAttachExternC, "Attach brackets to a bracketed extern \"C\" statement.");
+            toolTip.SetToolTip(checkBoxAttachClosingWhile, "Attach the closing 'while' of a 'do-while' statement to the closing brace.");
+            toolTip.SetToolTip(checkBoxIndent, "Indent using spaces or tab characters.");
 			toolTip.SetToolTip(checkBoxIndentForceTabX, "Set tab length to a length that is different than the indent length.");
 			toolTip.SetToolTip(checkBoxIndentClasses, "Indent 'class' and 'struct' blocks.");
 			toolTip.SetToolTip(checkBoxIndentModifiers, "Indent 'class' and 'struct' access modifiers one half indent.");
 			toolTip.SetToolTip(checkBoxIndentSwitches, "Indent 'switch' blocks.");
 			toolTip.SetToolTip(checkBoxIndentCases, "Indent 'case X:' blocks from the 'case X:' headers.");
-			toolTip.SetToolTip(checkBoxIndentNamesp, "Add extra indentation to namespace blocks.");
-			toolTip.SetToolTip(checkBoxIndentLabels, "Add extra indentation to labels so they appear 1 indent less than the current indentation.");
+            toolTip.SetToolTip(checkBoxIndentNamesp, "Add extra indentation to namespace blocks.");
+            toolTip.SetToolTip(checkBoxIndentAfterParens, "Indent, instead of align, continuation lines following lines that contain an opening paren '(' or an assignment '='.");
+            toolTip.SetToolTip(checkBoxIndentLabels, "Add extra indentation to labels so they appear 1 indent less than the current indentation.");
 			toolTip.SetToolTip(checkBoxIndentContinuation, "Set the continuation indent for a line that ends with an opening paren '(' or an assignment '='.");
 			toolTip.SetToolTip(checkBoxIndentPreprocBlock, "Indent preprocessor blocks at bracket level zero, and immediately within a namespace.");
 			toolTip.SetToolTip(checkBoxIndentPreprocDefine, "Indent multi-line preprocessor definitions ending with a backslash.");
@@ -121,7 +126,7 @@ namespace AStyleExtension {
 			toolTip.SetToolTip(checkBoxDelEmptyLines, "Delete empty lines within a function or method. Empty lines outside of functions or methods are not deleted.");
 			toolTip.SetToolTip(checkBoxFillEmptyLines, "Fill empty lines with the white space of the previous line.");
 			toolTip.SetToolTip(checkBoxCloseTemplates, "Close whitespace in the angle brackets of template definitions.");
-			toolTip.SetToolTip(checkBoxBreakClosingBrackets, "Break closing headers (e.g. 'else', 'catch') from their immediately preceding closing brackets.");
+			toolTip.SetToolTip(checkBoxBreakClosingBraces, "Break closing headers (e.g. 'else', 'catch') from their immediately preceding closing brackets.");
 			toolTip.SetToolTip(checkBoxBreakElseIfs, "Break 'else if' header combinations into separate lines.");
 			toolTip.SetToolTip(checkBoxBreakOneLineHeaders, "Break one line headers (e.g. 'if', 'while', 'else', ...) from a statement residing on the same line.");
 			toolTip.SetToolTip(checkBoxAddBrackets, "Add brackets to unbracketed one line conditional statements (e.g. 'if', 'for', 'while').");
