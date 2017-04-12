@@ -11,6 +11,7 @@ Supported Visual Studio editions:
     Visual Studio 2012 Professional (or above)
     Visual Studio 2013 Professional (or above)
     Visual Studio 2015 Professional (or above)
+    Visual Studio 2017 Professional (or above)
     AVR Studio 5
     Atmel Studio 6
     Atmel Studio 7
