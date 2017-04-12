@@ -2,7 +2,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
     <Identity Id="AStyle.6b52ccde-8ae4-4233-bccd-6b9b0ba06a56" Version="3.0.0.0" Language="en-US" Publisher="lukamicoder"/>
-    <DisplayName>AStyle Extension</DisplayName>
+    <DisplayName>AStyle Extension 2017</DisplayName>
     <Description xml:space="preserve">An extension for Artistic Style.</Description>
     <License>Resources\License.txt</License>
     <Icon>Resources\Preview.png</Icon>
