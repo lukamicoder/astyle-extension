@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AStyleExtension", "AStyleExtension\AStyleExtension.csproj", "{BA1C72BE-F8F5-4076-8C5C-FCEF8A9C877C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AStyleExtension", "AStyleExtension\AStyleExtension2010.csproj", "{BA1C72BE-F8F5-4076-8C5C-FCEF8A9C877C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

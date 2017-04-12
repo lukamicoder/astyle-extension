@@ -3,3 +3,5 @@
 /astyle-extension/*.suo
 /astyle-extension/*.user
 /astyle-extension/AStyleExtension/*.user
+packages
+.vs
