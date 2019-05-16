@@ -6,23 +6,27 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.AsyncPackageHelpers;
 using Microsoft.VisualStudio.Shell;
 
 namespace AStyleExtension {
-	[PackageRegistration(UseManagedResourcesOnly = true)]
-	[InstalledProductRegistration("#110", "#112", "3.0", IconResourceID = 400)]
 	[ProvideMenuResource("Menus.ctmenu", 1)]
-	[ProvideOptionPage(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1000, 1001, true)]
-	[ProvideProfileAttribute(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1002, 1003, true)]
-	[ProvideAutoLoad("{f1536ef8-92ec-443c-9ed7-fdadf150da82}")]
+	[InstalledProductRegistration("#110", "#112", "3.1", IconResourceID = 400)]
+	[Microsoft.VisualStudio.AsyncPackageHelpers.AsyncPackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string, PackageAutoLoadFlags.BackgroundLoad)]
+	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)]
+	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.SolutionHasSingleProject_string, PackageAutoLoadFlags.BackgroundLoad)]
+	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.SolutionHasMultipleProjects_string, PackageAutoLoadFlags.BackgroundLoad)]
+
 	[Guid(GuidList.GuidPkgString)]
+	[ProvideOptionPage(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1000, 1001, true)]
 	public sealed class AStyleExtensionPackage : Package {
 		private DTE _dte;
 		private OleMenuCommand _formatSelMenuCommand;
 		private OleMenuCommand _formatDocMenuCommand;
 		private bool _isCSharpEnabled;
-        private AStyleGeneralOptionsPage _dialog;
-        private DocumentEventListener _documentEventListener;
+		private AStyleGeneralOptionsPage _dialog;
+		private DocumentEventListener _documentEventListener;
 
 		protected override void Initialize() {
 			base.Initialize();
@@ -47,11 +51,11 @@ namespace AStyleExtension {
 
 			if (_dte.RegistryRoot.Contains("VisualStudio")) {
 				_isCSharpEnabled = true;
-            }
+			}
 
-            _dialog = (AStyleGeneralOptionsPage)GetDialogPage(typeof(AStyleGeneralOptionsPage));
-            _dialog.IsCSarpEnabled = _isCSharpEnabled;
-        }
+			_dialog = (AStyleGeneralOptionsPage)GetDialogPage(typeof(AStyleGeneralOptionsPage));
+			_dialog.IsCSarpEnabled = _isCSharpEnabled;
+		}
 
 		private TextDocument GetTextDocument(Document doc) {
 			if (doc == null || doc.ReadOnly) {
@@ -77,21 +81,21 @@ namespace AStyleExtension {
 		}
 
 		private int OnBeforeDocumentSave(uint docCookie) {
-            if (!_dialog.CppFormatOnSave && !_dialog.CsFormatOnSave) {
-                return VSConstants.S_OK;
-            }
+			if (!_dialog.CppFormatOnSave && !_dialog.CsFormatOnSave) {
+				return VSConstants.S_OK;
+			}
 
-            var doc = _dte.Documents.OfType<Document>().FirstOrDefault(x => x.FullName == _documentEventListener.GetDocumentName(docCookie));
-            var language = GetLanguage(doc);
+			var doc = _dte.Documents.OfType<Document>().FirstOrDefault(x => x.FullName == _documentEventListener.GetDocumentName(docCookie));
+			var language = GetLanguage(doc);
 
-            if (language == Language.CSharp && _dialog.CsFormatOnSave) {
-                FormatDocument(GetTextDocument(doc), Language.CSharp);
-            } else if (language == Language.Cpp && _dialog.CppFormatOnSave) {
-                FormatDocument(GetTextDocument(doc), Language.Cpp);
-            }
+			if (language == Language.CSharp && _dialog.CsFormatOnSave) {
+				FormatDocument(GetTextDocument(doc), Language.CSharp);
+			} else if (language == Language.Cpp && _dialog.CppFormatOnSave) {
+				FormatDocument(GetTextDocument(doc), Language.Cpp);
+			}
 
-            return VSConstants.S_OK;
-        }
+			return VSConstants.S_OK;
+		}
 
 		private void OnBeforeQueryStatus(object sender, EventArgs e) {
 			var cmd = (OleMenuCommand)sender;
@@ -195,8 +199,8 @@ namespace AStyleExtension {
 			}
 
 			if (language == Language.CSharp) {
-                options = _dialog.CsOptions;
-            } else if (language == Language.Cpp) {
+				options = _dialog.CsOptions;
+			} else if (language == Language.Cpp) {
 				options = _dialog.CppOptions;
 			} else {
 				return null;

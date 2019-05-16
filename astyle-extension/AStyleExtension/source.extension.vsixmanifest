@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="AStyle.6b52ccde-8ae4-4233-bccd-6b9b0ba06a56" Version="3.0.0.0" Language="en-US" Publisher="lukamicoder"/>
+    <Identity Id="AStyle.6b52ccde-8ae4-4233-bccd-6b9b0ba06a56" Version="3.1.0.0" Language="en-US" Publisher="lukamicoder"/>
     <DisplayName>AStyle Extension 2017</DisplayName>
     <Description xml:space="preserve">An extension for Artistic Style.</Description>
     <License>Resources\License.txt</License>
@@ -9,13 +9,14 @@
     <PreviewImage>Resources\Preview.png</PreviewImage>
   </Metadata>
   <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="15.0" />
-    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="15.0" />
-    <InstallationTarget Id="Microsoft.VisualStudio.Enterprise" Version="15.0" />
-    <InstallationTarget Id="Microsoft.VisualStudio.IntegratedShell" Version="15.0" />
+    <InstallationTarget Version="[12.0,17.0)" Id="Microsoft.VisualStudio.Community" />
+    <InstallationTarget Version="[12.0,17.0)" Id="Microsoft.VisualStudio.Pro" />
+    <InstallationTarget Version="[12.0,17.0)" Id="Microsoft.VisualStudio.Ultimate" />
+    <InstallationTarget Version="[12.0,17.0)" Id="Microsoft.VisualStudio.Premium" />
+    <InstallationTarget Version="[12.0,17.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
   </Installation>
   <Prerequisites>
-    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[12.0,17.0)" DisplayName="Visual Studio core editor" />
   </Prerequisites>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
