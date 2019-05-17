@@ -7,21 +7,18 @@ More info on Artistic Style at http://astyle.sourceforge.net/
 
 Supported Visual Studio editions:
 
-    Visual Studio 2010 Professional (or above)
     Visual Studio 2012 Professional (or above)
     Visual Studio 2013 Professional (or above)
     Visual Studio 2015 Professional (or above)
     Visual Studio 2017 Professional (or above)
-    AVR Studio 5
-    Atmel Studio 6
-    Atmel Studio 7
-
+    Visual Studio 2019 Professional (or above)
 
 
 Changelog:
 
-    Version 3.0 (April 10 2017) - Upgraded GUI to Artistic Style 3.0; Added support for Visual Studio 2017.
-    Version 2.8 (January 08 2017) - Upgraded GUI to Artistic Style 2.0.6; Added preliminary support for Visual Studio 2017.
+    Version 3.1 (May 15 2019) - Upgraded to Artistic Style 3.1. Added support for Visual Studio 2019. Removed support for Visual Studio 2010 and 2012
+    Version 3.0 (April 10 2017) - Upgraded GUI to Artistic Style 3.0. Added support for Visual Studio 2017.
+    Version 2.8 (January 08 2017) - Upgraded GUI to Artistic Style 2.0.6. Added preliminary support for Visual Studio 2017.
     Version 2.7 (October 7 2015) - Fixed --indent-preproc-block checkbox. Added support for Atmel Studio 7.0.
     Version 2.6 (June 27 2015) - Fixed: out-of-range values no longer crash VS. Upgraded to Artistic Style 2.05.1.
     Version 2.5 (November 18 2014) - Upgraded GUI to Artistic Style 2.0.5; Added support for Visual Studio 2015.
