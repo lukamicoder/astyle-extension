@@ -4,7 +4,7 @@
         <Identity Id="AStyle.C12A6681-221B-4A50-920F-1290FC2DF288" Version="4.0.0.0" Language="en-US" Publisher="Virtual-Maker"/>
         <DisplayName>AStyle Extension 2022</DisplayName>
         <Description xml:space="preserve">An extension for Visual Studio 2022 to format C/C++ and C# documents using Artistic Style engine.</Description>
-        <MoreInfo>https://github.com/virtual-maker</MoreInfo>
+        <MoreInfo>https://github.com/virtual-maker/astyle-extension-2022</MoreInfo>
         <License>Resources\License.txt</License>
         <Icon>Resources\Preview.png</Icon>
         <PreviewImage>Resources\Preview.png</PreviewImage>
