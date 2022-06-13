@@ -6,8 +6,8 @@ namespace AStyleExtension {
 		public delegate void AStyleErrorHandler(object sender, AStyleErrorArgs e);
 		public event AStyleErrorHandler ErrorRaised;
 
-		private AStyleErrorDelegate _aStyleError;
-		private AStyleMemAllocDelegate _aStyleMemAlloc;
+		private readonly AStyleErrorDelegate _aStyleError;
+		private readonly AStyleMemAllocDelegate _aStyleMemAlloc;
 
 		private delegate void AStyleErrorDelegate(int errorNum, [MarshalAs(UnmanagedType.LPStr)] String error);
 		private delegate IntPtr AStyleMemAllocDelegate(int size);
@@ -50,11 +50,8 @@ namespace AStyleExtension {
 		}
 
 		private void OnAStyleError(object source, AStyleErrorArgs args) {
-			AStyleErrorHandler tmp = ErrorRaised;
-			if (tmp != null) {
-				tmp(source, args);
-			}
-		}
+            ErrorRaised?.Invoke(source, args);
+        }
 
 		private void OnAStyleError(int errorNumber, String errorMessage) {
 			OnAStyleError(this, new AStyleErrorArgs(errorNumber + ": " + errorMessage));

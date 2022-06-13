@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="AStyle.6b52ccde-8ae4-4233-bccd-6b9b0ba06a56" Version="3.1.0.0" Language="en-US" Publisher="lukamicoder"/>
-    <DisplayName>AStyle Extension 2017</DisplayName>
-    <Description xml:space="preserve">An extension for Artistic Style.</Description>
-    <License>Resources\License.txt</License>
-    <Icon>Resources\Preview.png</Icon>
-    <PreviewImage>Resources\Preview.png</PreviewImage>
-  </Metadata>
-  <Installation>
-    <InstallationTarget Version="[12.0,17.0)" Id="Microsoft.VisualStudio.Community" />
-    <InstallationTarget Version="[12.0,17.0)" Id="Microsoft.VisualStudio.Pro" />
-    <InstallationTarget Version="[12.0,17.0)" Id="Microsoft.VisualStudio.Ultimate" />
-    <InstallationTarget Version="[12.0,17.0)" Id="Microsoft.VisualStudio.Premium" />
-    <InstallationTarget Version="[12.0,17.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
-  </Installation>
-  <Prerequisites>
-    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[12.0,17.0)" DisplayName="Visual Studio core editor" />
-  </Prerequisites>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
-  </Assets>
+    <Metadata>
+        <Identity Id="AStyle.C12A6681-221B-4A50-920F-1290FC2DF288" Version="4.0.0.0" Language="en-US" Publisher="Virtual-Maker"/>
+        <DisplayName>AStyle Extension 2022</DisplayName>
+        <Description xml:space="preserve">An extension for Visual Studio 2022 to format C/C++ and C# documents using Artistic Style engine.</Description>
+        <MoreInfo>https://github.com/virtual-maker</MoreInfo>
+        <License>Resources\License.txt</License>
+        <Icon>Resources\Preview.png</Icon>
+        <PreviewImage>Resources\Preview.png</PreviewImage>
+        <Tags>C#, C++, AStyle, Tool, Editor</Tags>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Enterprise">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.IntegratedShell">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+    </Installation>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,)" DisplayName="Visual Studio core editor" />
+    </Prerequisites>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
+    </Assets>
 </PackageManifest>

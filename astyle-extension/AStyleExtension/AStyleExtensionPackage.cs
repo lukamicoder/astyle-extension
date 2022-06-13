@@ -8,15 +8,16 @@ using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.AsyncPackageHelpers;
 using Microsoft.VisualStudio.Shell;
+using Microsoft;
 
 namespace AStyleExtension {
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[InstalledProductRegistration("#110", "#112", "3.1", IconResourceID = 400)]
 	[Microsoft.VisualStudio.AsyncPackageHelpers.AsyncPackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string, PackageAutoLoadFlags.BackgroundLoad)]
-	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)]
-	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.SolutionHasSingleProject_string, PackageAutoLoadFlags.BackgroundLoad)]
-	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.SolutionHasMultipleProjects_string, PackageAutoLoadFlags.BackgroundLoad)]
+	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string, Microsoft.VisualStudio.AsyncPackageHelpers.PackageAutoLoadFlags.BackgroundLoad)]
+	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, Microsoft.VisualStudio.AsyncPackageHelpers.PackageAutoLoadFlags.BackgroundLoad)]
+	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.SolutionHasSingleProject_string, Microsoft.VisualStudio.AsyncPackageHelpers.PackageAutoLoadFlags.BackgroundLoad)]
+	[Microsoft.VisualStudio.AsyncPackageHelpers.ProvideAutoLoad(VSConstants.UICONTEXT.SolutionHasMultipleProjects_string, Microsoft.VisualStudio.AsyncPackageHelpers.PackageAutoLoadFlags.BackgroundLoad)]
 
 	[Guid(GuidList.GuidPkgString)]
 	[ProvideOptionPage(typeof(AStyleGeneralOptionsPage), "AStyle Formatter", "General", 1000, 1001, true)]
@@ -29,22 +30,24 @@ namespace AStyleExtension {
 		private DocumentEventListener _documentEventListener;
 
 		protected override void Initialize() {
+			ThreadHelper.ThrowIfNotOnUIThread();
 			base.Initialize();
 
-			var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-			if (null != mcs) {
-				var id = new CommandID(GuidList.GuidCmdSet, (int)PkgCmdIDList.FormatDocumentCommand);
-				_formatDocMenuCommand = new OleMenuCommand(FormatDocumentCallback, id);
-				mcs.AddCommand(_formatDocMenuCommand);
-				_formatDocMenuCommand.BeforeQueryStatus += OnBeforeQueryStatus;
+            if (GetService(typeof(IMenuCommandService)) is OleMenuCommandService mcs)
+            {
+                var id = new CommandID(GuidList.GuidCmdSet, (int)PkgCmdIDList.FormatDocumentCommand);
+                _formatDocMenuCommand = new OleMenuCommand(FormatDocumentCallback, id);
+                mcs.AddCommand(_formatDocMenuCommand);
+                _formatDocMenuCommand.BeforeQueryStatus += OnBeforeQueryStatus;
 
-				id = new CommandID(GuidList.GuidCmdSet, (int)PkgCmdIDList.FormatSelectionCommand);
-				_formatSelMenuCommand = new OleMenuCommand(FormatSelectionCallback, id);
-				mcs.AddCommand(_formatSelMenuCommand);
-				_formatSelMenuCommand.BeforeQueryStatus += OnBeforeQueryStatus;
-			}
+                id = new CommandID(GuidList.GuidCmdSet, (int)PkgCmdIDList.FormatSelectionCommand);
+                _formatSelMenuCommand = new OleMenuCommand(FormatSelectionCallback, id);
+                mcs.AddCommand(_formatSelMenuCommand);
+                _formatSelMenuCommand.BeforeQueryStatus += OnBeforeQueryStatus;
+            }
 
-			_dte = (DTE)GetService(typeof(DTE));
+            _dte = (DTE)GetService(typeof(DTE));
+			Assumes.Present(_dte);
 
 			_documentEventListener = new DocumentEventListener(this);
 			_documentEventListener.BeforeSave += OnBeforeDocumentSave;
@@ -58,6 +61,7 @@ namespace AStyleExtension {
 		}
 
 		private TextDocument GetTextDocument(Document doc) {
+			ThreadHelper.ThrowIfNotOnUIThread();
 			if (doc == null || doc.ReadOnly) {
 				return null;
 			}
@@ -68,6 +72,7 @@ namespace AStyleExtension {
 		}
 
 		private Language GetLanguage(Document doc) {
+			ThreadHelper.ThrowIfNotOnUIThread();
 			var language = Language.NA;
 
 			string lang = doc.Language.ToLower();
@@ -81,11 +86,15 @@ namespace AStyleExtension {
 		}
 
 		private int OnBeforeDocumentSave(uint docCookie) {
+			ThreadHelper.ThrowIfNotOnUIThread();
 			if (!_dialog.CppFormatOnSave && !_dialog.CsFormatOnSave) {
 				return VSConstants.S_OK;
 			}
 
-			var doc = _dte.Documents.OfType<Document>().FirstOrDefault(x => x.FullName == _documentEventListener.GetDocumentName(docCookie));
+			var doc = _dte.Documents.OfType<Document>().FirstOrDefault(x => {
+				ThreadHelper.ThrowIfNotOnUIThread();
+				return x.FullName == _documentEventListener.GetDocumentName(docCookie); 
+			});
 			var language = GetLanguage(doc);
 
 			if (language == Language.CSharp && _dialog.CsFormatOnSave) {
@@ -98,6 +107,7 @@ namespace AStyleExtension {
 		}
 
 		private void OnBeforeQueryStatus(object sender, EventArgs e) {
+			ThreadHelper.ThrowIfNotOnUIThread();
 			var cmd = (OleMenuCommand)sender;
 			var language = GetLanguage(_dte.ActiveDocument);
 
@@ -111,6 +121,7 @@ namespace AStyleExtension {
 		}
 
 		private void FormatDocumentCallback(object sender, EventArgs e) {
+			ThreadHelper.ThrowIfNotOnUIThread();
 			var language = GetLanguage(_dte.ActiveDocument);
 			var textDoc = GetTextDocument(_dte.ActiveDocument);
 
@@ -118,6 +129,7 @@ namespace AStyleExtension {
 		}
 
 		private void FormatDocument(TextDocument textDoc, Language language) {
+			ThreadHelper.ThrowIfNotOnUIThread();
 			if (textDoc == null || language == Language.NA) {
 				return;
 			}
@@ -137,6 +149,7 @@ namespace AStyleExtension {
 		}
 
 		private void FormatSelectionCallback(object sender, EventArgs e) {
+			ThreadHelper.ThrowIfNotOnUIThread();
 			var language = GetLanguage(_dte.ActiveDocument);
 			var textDoc = GetTextDocument(_dte.ActiveDocument);
 
@@ -144,6 +157,7 @@ namespace AStyleExtension {
 		}
 
 		private void FormatSelection(TextDocument textDoc, Language language) {
+			ThreadHelper.ThrowIfNotOnUIThread();
 			if (textDoc == null || language == Language.NA) {
 				return;
 			}

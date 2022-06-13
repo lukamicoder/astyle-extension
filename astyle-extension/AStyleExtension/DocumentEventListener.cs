@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace AStyleExtension {
     public class DocumentEventListener : IDisposable, IVsRunningDocTableEvents3 {
-        private RunningDocumentTable _table;
+        private readonly RunningDocumentTable _table;
         private uint _cookie;
         private bool _isDisposed;
 
