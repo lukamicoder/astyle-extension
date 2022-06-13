@@ -1,0 +1,50 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Install AStyle 3.1 tool
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      shell: pwsh
+      run: |
+        # Create download folder
+        md "myTools"
+        # Download AStyle v3.1
+        $url = "https://sourceforge.net/projects/astyle/files/astyle/astyle%203.1/AStyle_3.1_windows.zip/download"
+        $file = "./myTools/astyle.zip"
+        Invoke-WebRequest -UserAgent "Wget" -Uri $url -OutFile $file
+        # Unzip result
+        Expand-Archive $file -DestinationPath "./myTools"
+        # List result folder
+        ls ./myTools/AStyle
+        # Run AStyle tool and echo version
+        & ./myTools/AStyle/bin/AStyle.exe --version
+        
+    - name: Build AStyle 3.1 dll
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      shell: pwsh
+      run: |
+        # Install PS module
+        Set-PSRepository PSGallery -InstallationPolicy Trusted
+        Install-Module -Name Invoke-MsBuild -ErrorAction Stop
+        # Build solution
+        Invoke-MsBuild -Path ".\myTools\AStyle\build\vs2017\AStyle Dll.sln" -MsBuildParameters "/target:Build /property:Configuration=Release"
+        # List result folder
+        ls "./myTools/AStyle/build/vs2017/x64"
+        
+    - name: Upload build log for AStyle 3.1 dll
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: AStyle build log
+        path: 'C:\Users\runneradmin\AppData\Local\Temp\AStyle Dll.sln.msbuild.log'
+        
