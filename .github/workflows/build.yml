@@ -2,9 +2,12 @@ name: .NET
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: ./astyle-extension/AStyleExtension2022.sln
 
 jobs:
   build:
@@ -12,6 +15,15 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+      
     - name: Install AStyle 3.1 tool
       working-directory: ${{env.GITHUB_WORKSPACE}}
       shell: pwsh
@@ -24,12 +36,12 @@ jobs:
         Invoke-WebRequest -UserAgent "Wget" -Uri $url -OutFile $file
         # Unzip result
         Expand-Archive $file -DestinationPath "./myTools"
-        # List result folder
-        ls ./myTools/AStyle
         # Run AStyle tool and echo version
         & ./myTools/AStyle/bin/AStyle.exe --version
+        # Copy modified VS project file
+        Copy-Item "./astyle-extension/AStyleExtension/AStyle/AStyle Dll.vcxproj" -Destination "./myTools/AStyle/build/vs2017/AStyle Dll"
         
-    - name: Build AStyle 3.1 dll
+    - name: Build AStyle 3.1 DLL
       working-directory: ${{env.GITHUB_WORKSPACE}}
       shell: pwsh
       run: |
@@ -38,13 +50,25 @@ jobs:
         Install-Module -Name Invoke-MsBuild -ErrorAction Stop
         # Build solution
         Invoke-MsBuild -Path ".\myTools\AStyle\build\vs2017\AStyle Dll.sln" -MsBuildParameters "/target:Build /property:Configuration=Release"
-        # List result folder
-        ls "./myTools/AStyle/build/vs2017/x64"
         
-    - name: Upload build log for AStyle 3.1 dll
-      if: ${{ failure() }}
+    - name: Upload build log for AStyle DLL when build failed
+      if: ${{failure()}}
       uses: actions/upload-artifact@v3
       with:
         name: AStyle build log
         path: 'C:\Users\runneradmin\AppData\Local\Temp\AStyle Dll.sln.msbuild.log'
         
+    - name: Build AStyle extension solution
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      shell: pwsh
+      run: |
+        # Copy new created AStyle DLL
+        Copy-Item "./myTools/AStyle/build/vs2017/x64/bin/AStyle31.dll" -Destination "./astyle-extension/AStyleExtension/AStyle/AStyle.dll"
+        # Build solution
+        Invoke-MsBuild -Path ${{env.SOLUTION_FILE_PATH}} -MsBuildParameters "/target:Build /property:Configuration=Release"
+
+    - name: Upload VSIX extension
+      uses: actions/upload-artifact@v3
+      with:
+        name: VSIX extension
+        path: ${{github.workspace}}/astyle-extension/AStyleExtension/bin/Release/*.vsix
